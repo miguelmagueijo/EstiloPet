@@ -1,0 +1,177 @@
+.divisao {
+  display: grid;
+  grid-template-columns: 68% 32%;
+  grid-gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  padding-left: 20%;
+  margin-bottom: 100px;
+}
+
+.left {
+  margin: 0 auto;
+  margin-left: 100;
+  width: 100%;
+  height: 100%;
+}
+
+.right {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+iframe {
+  align-items: center;
+  width: 100%;
+  height: 450px;
+}
+
+.divisao h4 {
+  margin: 10px 0;
+  float: left;
+}
+
+li {
+  list-style: none;
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+#contactos {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#horario {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.banner img {
+  width: 135px;
+  height: 140px;
+  margin-right: 5px;
+}
+
+#text h3 {
+  text-align: center;
+  margin-top: 10px;
+}
+
+#text p {
+  text-align: center;
+}
+
+#text {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #333;
+}
+
+#text h3 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+text h4 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#text p {
+  margin-bottom: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 20px auto 35px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+  /* centraliza o conteúdo das células */
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+}
+
+tr:nth-child(even) td {
+  background-color: #f2f2f2;
+}
+
+tr:hover td {
+  background-color: #ddd;
+}
+
+#table h1 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 24px;
+  text-align: center;
+}
+
+#table td:first-child {
+  font-weight: bold;
+}
+
+#table tbody td:first-child {
+  font-weight: normal;
+}
+
+#table tbody tr:first-child td {
+  border-top: none;
+}
+
+#table tbody td:last-child {
+  border-right: none;
+}
+
+#table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+#contacto {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+#container-marcacao{
+  margin-bottom: 100px;
+}

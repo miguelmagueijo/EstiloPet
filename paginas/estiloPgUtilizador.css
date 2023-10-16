@@ -1,0 +1,241 @@
+#body-accordion{
+    width: 950px;
+    margin: 0px auto;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+    background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+    display: none;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+/* Estilo do ícone */
+.collapsible i {
+    float: right;
+    transform: rotate(0deg);
+    transition: transform 0.3s;
+}
+
+/* Estilo do ícone ativo */
+.collapsible.active i {
+    transform: rotate(180deg);
+}
+
+/* Estilo do ícone */
+button.accordion img {
+    float: right;
+    /* posiciona o ícone à direita */
+    height: 12px;
+    /* altura do ícone */
+    margin-top: 10px;
+    /* alinha verticalmente com o texto */
+    margin-left: 10px;
+    /* adiciona uma margem à esquerda do ícone */
+    transform: rotate(0deg);
+    /* define a rotação inicial do ícone */
+    transition: transform 0.3s;
+    /* adiciona uma transição suave à animação do ícone */
+}
+
+/* Estilo do ícone ativo */
+button.accordion.active img {
+    transform: rotate(180deg);
+    /* rotaciona o ícone quando o accordion estiver aberto */
+}
+
+/* Define a fonte e as cores de fundo e texto para o formulário */
+/* Adiciona um espaçamento interno e uma borda ao redor do formulário */
+#form-registar-animal form {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 20px;
+}
+
+/* Estilo para o label */
+#form-registar-animal label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+/* Estilo para o input de texto */
+#form-registar-animal input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 200px;
+}
+
+
+/* Estilo para as labels dos radio buttons */
+#form-registar-animal input[type="radio"]+label {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 10%;
+    text-align: center;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+/* Estilo para a label do radio button selecionado */
+#form-registar-animal input[type="radio"]:checked {
+    background-color: #ccc;
+}
+
+/* Estilo para o botão de submit */
+#form-registar-animal input[type="submit"] {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Estilo para o botão de submit quando o mouse estiver sobre ele */
+#form-registar-animal input[type="submit"]:hover {
+    background-color: #555;
+}
+
+#form-registar-animal {
+    width: 50%;
+    float: left;
+}
+
+#table-pesos {
+    width: 50%;
+    float: left;
+    margin: 40px auto;
+    /* centralizar a div horizontalmente */
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    width: 100%;
+    background-color: #f0f0f0;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #d8d8d8;
+    color: #333;
+    font-weight: bold;
+}
+
+#marcacoes form {
+    margin: auto;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#marcacoes label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#marcacoes input[type="date"],
+input[type="time"],
+select {
+    display: block;
+    margin-bottom: 20px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#marcacoes input[type="submit"] {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Estilo para o botão de submit quando o mouse estiver sobre ele */
+#marcacoes input[type="submit"]:hover {
+    background-color: #555;
+}
+
+#marcacoes select:focus,
+input[type="date"]:focus,
+input[type="time"]:focus {
+    outline: none;
+    border: 2px solid #333;
+}
+
+/* estilo para a largura do dropdown */
+#marcacoes select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 10px 40px 10px 10px;
+    background: url("https://cdn4.iconfinder.com/data/icons/feather/24/chevron-down-512.png") no-repeat;
+    background-size: 20px;
+    background-position: right 10px center;
+    width: 100%;
+}
+
+/* Estilo para o select */
+#porte-animal {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 20%;
+}
+
+#efetuar-marcacao {
+    margin: 0 37%;
+    justify-content: center;
+}
+
+.edit-animal {
+    margin: 20px auto;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
