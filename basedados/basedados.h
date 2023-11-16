@@ -1,17 +1,11 @@
 <?php
-// Ligar há base de dados
-$dbhost = 'localhost';
-$dbuser = 'root';
-$dbpass = '';
+    error_reporting(E_ERROR | E_PARSE);
 
-$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+    $database_name = "lpi";
 
-if(! $conn ){
-    echo "Erro ao conectar ao MySQL.";
-	exit;
-}
+    $conn = mysqli_connect("localhost", "root", "", $database_name);
 
-//Seleciona a base de dados
-mysqli_select_db($conn,'lpi');
-
+    if(!$conn) {
+        die("Erro ao conectar ao MySQL. Verifique que a base de dados \"$database_name\" existe");
+    }
 ?>
