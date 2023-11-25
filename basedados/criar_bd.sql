@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `lpi`
 --
-CREATE DATABASE IF NOT EXISTS `lpi` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `lpi`;
+CREATE DATABASE IF NOT EXISTS `lod_mm_ma` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `lod_mm_ma`;
 
 -- --------------------------------------------------------
 
