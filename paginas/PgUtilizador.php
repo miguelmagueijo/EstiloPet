@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="stylesheet" type="text/css" href="estilo.css" />
     <link rel="stylesheet" type="text/css" href="estiloPgUtilizador.css" />
+    <link rel="stylesheet" type="text/css" href="pgUtilizador.css">
 </head>
 
 <body>
@@ -477,20 +478,44 @@
         ?>
 
         <?php
+            /* TODO: remove accordion, adopt menu-box */
+            /* TODO: change DTD and Schema href */
             if ($row["tipoUtilizador"] == ADMIN) {
                 echo "
-                    <div style='width: 50%; margin: 2rem auto;'>
-                        <a href='PgExportDatabase.php'>Exportar base de dados para XML</a>
+                    <div class='menu-box hidden'>
+                        <div class='menu-title-container'>
+                            <h2 class='menu-title'>Funções XML</h2>
+                            <img class='menu-title-arrow' src='down-arrow.webp'>
+                        </div>
+                        <div class='menu-content'>
+                            <div class='menu-content-option'>
+                                <h3 style=''>Base de dados</h3>
+                                <div>
+                                    <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para XML</a>
+                                    <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para DTD</a>
+                                    <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para XML Schema</a>
+                                </div>
+                            </div>                           
+                        </div>
                     </div>
                 ";
             }
         ?>
 
-
         <div id="footer">
             <p id="esq">Realizado por Ana Correia & Clara Aidos</p>
         </div>
     </div>
+
+    <!-- TODO: remove accordion, adopt menu-box -->
+    <script>
+        const menuChoices = document.getElementsByClassName("menu-box");
+        for (const mc of menuChoices) {
+            mc.addEventListener("click", (evt) => {
+                evt.currentTarget.classList.toggle("hidden");
+            })
+        }
+    </script>
 
     <!--JavaScript para o accordion funcionar-->
     <script>
