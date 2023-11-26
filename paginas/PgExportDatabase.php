@@ -11,10 +11,9 @@
 <html lang="PT">
     <head>
         <meta charset="UTF-8">
-        <title>Estilo Pet</title>
+        <title>Estilo Pet - Exportação da base dados para XML</title>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <link rel="stylesheet" type="text/css" href="estilo.css" />
-        <link rel="stylesheet" type="text/css" href="estiloPgUtilizador.css" />
 
         <style>
             * {
