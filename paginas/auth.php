@@ -25,11 +25,8 @@
         die("AUTH: Could not get data.");
     }
 
-    $authAssoc = $stmt->get_result()->fetch_assoc();
+    $auth_userType = $stmt->get_result()->fetch_assoc()["tipoUtilizador"];
 
-    $auth_userType = $authAssoc["tipoUtilizador"];
-
-    unset($stmt);
-    unset($authRes);
+    unset($stmt, $authAssoc);
 ?>
 
