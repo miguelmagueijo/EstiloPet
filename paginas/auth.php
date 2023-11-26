@@ -27,6 +27,6 @@
 
     $auth_userType = $stmt->get_result()->fetch_assoc()["tipoUtilizador"];
 
-    unset($stmt, $authAssoc);
+    unset($stmt);
 ?>
 
