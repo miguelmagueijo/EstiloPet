@@ -64,55 +64,58 @@ if (!auth_isAdmin()) {
         <h2 style="margin-bottom: 1rem;">Código</h2>
         <a class="voltar-btn" href="PgUtilizador.php">Voltar</a>
     </div>
+    <?php
+        $currentDate = null;
+        try {
+            $currentDate = new DateTime("now", new DateTimeZone("Europe/Lisbon"));
+        } catch (Exception $e) {
+            die("Couldn't get current datetime");
+        }
+
+        echo "<div>Export created on ".$currentDate->format("Y-m-d H:i:s")."</div>"
+    ?>
     <!-- TODO: use https://highlightjs.org/ -->
     <pre id="dtd-code">
-                <?php
-                    /* @var $conn mysqli */
-                    $res = $conn->query("SHOW TABLES");
+        <?php
+            /* @var $conn mysqli */
+            $res = $conn->query("SHOW TABLES");
 
-                    if (!$res) {
-                        die("SQL Error #1");
-                    }
+            if (!$res) {
+                die("SQL Error #1");
+            }
 
-                    $currentDate = null;
-                    try {
-                        $currentDate = new DateTime("now", new DateTimeZone("Europe/Lisbon"));
-                    } catch (Exception $e) {
-                        die("Couldn't get current datetime");
-                    }
+            $dtdString = "<!DOCTYPE lod_mm_ma [\n";
+            $dtdString .= "\t<!ELEMENT lod_mm_ma (";
 
-                    $dtdString = "<!DOCTYPE lod_mm_ma [\n";
-                    $dtdString .= "\t<!ELEMENT lod_mm_ma (";
+            $tableNames = array();
+            while($row = $res->fetch_row()) {
+                $tableNames[] = $row[0];
+                $dtdString .= "tabela_".$row[0].", ";
+            }
 
-                    $tableNames = array();
-                    while($row = $res->fetch_row()) {
-                        $tableNames[] = $row[0];
-                        $dtdString .= "tabela_".$row[0].", ";
-                    }
+            $dtdString = rtrim($dtdString, ", ");
+            $dtdString .= ")>\n";
 
-                    $dtdString = rtrim($dtdString, ", ");
-                    $dtdString .= ")>\n";
+            foreach($tableNames as $tName) {
+                $dtdString .= "\t\t<!ELEMENT tabela_$tName ($tName*)>\n";
 
-                    foreach($tableNames as $tName) {
-                        $dtdString .= "\t\t<!ELEMENT tabela_$tName ($tName*)>\n";
+                $resCols = $conn->query("SHOW COLUMNS FROM $tName");
+                $columnNames = array();
+                while($row = $resCols->fetch_row()) {
+                    $columnNames[] = $row[0];
+                }
 
-                        $resCols = $conn->query("SHOW COLUMNS FROM $tName");
-                        $columnNames = array();
-                        while($row = $resCols->fetch_row()) {
-                            $columnNames[] = $row[0];
-                        }
+                $dtdString .= "\t\t\t<!ELEMENT $tName (".implode(", ", $columnNames).")>\n";
 
-                        $dtdString .= "\t\t\t<!ELEMENT $tName (".implode(", ", $columnNames).")>\n";
+                foreach($columnNames as $cName) {
+                    $dtdString .= "\t\t\t\t<!ELEMENT $cName (#PCDATA)>\n";
+                }
+            }
 
-                        foreach($columnNames as $cName) {
-                            $dtdString .= "\t\t\t\t<!ELEMENT $cName (#PCDATA)>\n";
-                        }
-                    }
-
-                    $dtdString .= "]>";
-                    echo htmlentities($dtdString);
-                ?>
-            </pre>
+            $dtdString .= "]>";
+            echo htmlentities($dtdString);
+        ?>
+    </pre>
     <script>
         // Remove leading spaces of <pre> first line
         const xmlCodeElement = document.getElementById("dtd-code");
