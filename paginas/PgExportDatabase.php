@@ -27,10 +27,30 @@
             }
 
             pre {
-                margin: 0;
+                font-size: 16px;
+                margin: 0 0 5rem 0;
                 border: 2px solid black;
                 border-radius: 5px;
                 padding: 1rem 1rem;
+            }
+
+            .voltar-btn {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                border: 2px solid black;
+                border-radius: 5px;
+                text-decoration: none;
+                color: white;
+                font-weight: bolder;
+                font-family: Calibri, sans-serif;
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                background: cornflowerblue;
+                transition-duration: 300ms;
+            }
+
+            .voltar-btn:hover {
+                background: #3662bb;
             }
         </style>
     </head>
@@ -41,10 +61,14 @@
         </h1>
 
         <main class="main-container">
-            <h2 style="margin-bottom: 1rem;">Código</h2>
+            <div>
+                <h2 style="margin-bottom: 1rem;">Código</h2>
+                <a class="voltar-btn" href="PgUtilizador.php">Voltar</a>
+            </div>
             <!-- TODO: use https://highlightjs.org/ -->
             <pre id="xml-code">
                 <?php
+                    /* @var $conn mysqli */
                     $res = $conn->query("SHOW TABLES");
 
                     if (!$res) {
@@ -58,20 +82,41 @@
                         die("Couldn't get current datetime");
                     }
 
-                $xmlDoc = new DOMDocument();
+                    $xmlDoc = new DOMDocument("1.0", "UTF-8");
                     $xmlDoc->formatOutput = true;
                     $xmlRoot = $xmlDoc->createElement("lod_mm_ma"); // TODO: use variable from basededados.h
+
                     $exportDateElement = $xmlDoc->createElement("export_date", $currentDate->format("Y-m-d H:i:s"));
                     $exportDateElement->setAttribute("timezone", $currentDate->getTimezone()->getName());
                     $xmlRoot->appendChild($exportDateElement);
 
+                    while($rowTables = $res->fetch_row()) {
+                        $tableName = $rowTables[0];
+                        $tableElement = $xmlDoc->createElement("tabela_$tableName");
+
+                        $resTableData = $conn->query("SELECT * FROM $tableName");
+
+                        // TODO: confirm if this code stays
+                        if ($resTableData->num_rows == 0) {
+                            $tableElement->nodeValue = "NO DATA";
+                            $xmlRoot->appendChild($tableElement);
+                            continue;
+                        }
+
+                        while($tRow = $resTableData->fetch_assoc()) {
+                            $tableRowElement = $xmlDoc->createElement($tableName);
+
+                            foreach($tRow as $colName => $colValue) {
+                                $tableRowElement->appendChild($xmlDoc->createElement($colName, $colValue));
+                            }
+
+                            $tableElement->appendChild($tableRowElement);
+                        }
+                        $xmlRoot->appendChild($tableElement);
+                    }
+
                     $xmlDoc->appendChild($xmlRoot);
                     echo htmlentities($xmlDoc->saveXML());
-
-                    $tableNames = array();
-                    while ($row = $tableNames) {
-                        array_push($tableNames, $tableNames[0]);
-                    }
                 ?>
             </pre>
             <script>

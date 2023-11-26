@@ -2,7 +2,7 @@
     include_once('../basedados/basedados.h');
     include_once("tiposUtilizadores.php");
 
-    if (!$conn->ping()) {
+    if (!isset($conn) || !$conn->ping()) {
         die("Database failure, please contact the admin.");
     }
 
