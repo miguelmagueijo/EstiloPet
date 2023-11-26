@@ -39,7 +39,7 @@
                             <h1>Estilo Pet</h1>
                             <ul id='nav'>
                                 <li><a href='index.php' class='activa'>Home</a></li>
-                                <li><a href='PgDadosPessoais.php?'>Dados Pessoais</a></li>
+                                <li><a href='PgDadosPessoais.php'>Dados Pessoais</a></li>
                                 <li><a href='contactos.php'>Contactos</a></li>
                                 <li id='logout'><a href='logout.php'>Logout</a></li>
                             </ul>
@@ -474,8 +474,19 @@
                     </div>
                 </div>';
         }
-
         ?>
+
+        <?php
+            if ($row["tipoUtilizador"] == ADMIN) {
+                echo "
+                    <div style='width: 50%; margin: 2rem auto;'>
+                        <a href='PgExportDatabase.php'>Exportar base de dados para XML</a>
+                    </div>
+                ";
+            }
+        ?>
+
+
         <div id="footer">
             <p id="esq">Realizado por Ana Correia & Clara Aidos</p>
         </div>
