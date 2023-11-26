@@ -492,7 +492,7 @@
                                 <h3 style=''>Base de dados</h3>
                                 <div>
                                     <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para XML</a>
-                                    <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para DTD</a>
+                                    <a class='menu-action-button' href='PgExportDatabaseDTD.php'>Exportar para DTD</a>
                                     <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para XML Schema</a>
                                 </div>
                             </div>                           
