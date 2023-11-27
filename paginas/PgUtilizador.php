@@ -493,7 +493,7 @@
                                 <div>
                                     <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para XML</a>
                                     <a class='menu-action-button' href='PgExportDatabaseDTD.php'>Exportar para DTD</a>
-                                    <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para XML Schema</a>
+                                    <a class='menu-action-button' href='PgExportDatabaseXSD.php'>Exportar para XML Schema</a>
                                 </div>
                             </div>                           
                         </div>
