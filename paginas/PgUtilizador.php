@@ -479,27 +479,49 @@
 
         <?php
             /* TODO: remove accordion, adopt menu-box */
-            /* TODO: change DTD and Schema href */
+            echo "
+                <div class='menu-box hidden' style='margin-bottom: 5rem'>
+                    <div class='menu-title-container'>
+                        <h2 class='menu-title'>Funções XML</h2>
+                        <img class='menu-title-arrow' src='down-arrow.webp'>
+                    </div>
+                    <div class='menu-content'>
+                        <div class='menu-content-option'>
+                            <h3>Dados gerais</h3>
+                            <div>
+                                <a class='menu-action-button' href='#'>Dados do website</a>
+                            </div>
+                        </div>";
+
+            if ($row["tipoUtilizador"] == ADMIN || $row["tipoUtilizador"] == FUNC) {
+                echo "
+                            <div class='menu-content-option'>
+                                <h3>Reservas</h3>
+                                <div>
+                                    <a class='menu-action-button' href='#'>Visualizar em XML</a>
+                                </div>
+                            </div>
+                    ";
+            }
+
             if ($row["tipoUtilizador"] == ADMIN) {
                 echo "
-                    <div class='menu-box hidden'>
-                        <div class='menu-title-container'>
-                            <h2 class='menu-title'>Funções XML</h2>
-                            <img class='menu-title-arrow' src='down-arrow.webp'>
-                        </div>
-                        <div class='menu-content'>
                             <div class='menu-content-option'>
-                                <h3 style=''>Base de dados</h3>
+                                <h3>Base de dados</h3>
                                 <div>
                                     <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para XML</a>
                                     <a class='menu-action-button' href='PgExportDatabaseDTD.php'>Exportar para DTD</a>
                                     <a class='menu-action-button' href='PgExportDatabaseXSD.php'>Exportar para XML Schema</a>
                                 </div>
-                            </div>                           
-                        </div>
-                    </div>
+                            </div>
                 ";
             }
+
+            echo "
+                        </div>                          
+                    </div>
+                </div>
+            ";
         ?>
 
         <div id="footer">

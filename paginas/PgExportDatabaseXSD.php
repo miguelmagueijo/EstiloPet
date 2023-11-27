@@ -98,6 +98,16 @@
         <h2 style="margin-bottom: 1rem;">Código</h2>
         <a class="voltar-btn" href="PgUtilizador.php">Voltar</a>
     </div>
+    <?php
+        $currentDate = null;
+        try {
+            $currentDate = new DateTime("now", new DateTimeZone("Europe/Lisbon"));
+        } catch (Exception $e) {
+            die("Couldn't get current datetime");
+        }
+
+        echo "<div>Export created on ".$currentDate->format("Y-m-d H:i:s")."</div>";
+    ?>
     <!-- TODO: use https://highlightjs.org/ -->
     <pre id="xml-schema-code">
         <?php
@@ -106,13 +116,6 @@
 
             if (!$res) {
                 die("SQL Error #1");
-            }
-
-            $currentDate = null;
-            try {
-                $currentDate = new DateTime("now", new DateTimeZone("Europe/Lisbon"));
-            } catch (Exception $e) {
-                die("Couldn't get current datetime");
             }
 
             $xsdDoc = new DOMDocument("1.0", "UTF-8");
