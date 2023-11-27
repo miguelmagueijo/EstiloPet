@@ -46,6 +46,10 @@ h2 {
     gap: 1rem;
 }
 
+.menu-content-option:nth-child(n+2) {
+    margin-top: 1rem;
+}
+
 .menu-action-button {
     text-decoration: none;
     color: black;
