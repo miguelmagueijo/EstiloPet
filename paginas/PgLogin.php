@@ -1,3 +1,11 @@
+<?php
+    session_start();
+    if (isset($_SESSION['utilizador'])) {
+        header("Refresh:0; url=PgUtilizador.php");
+        die();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -9,13 +17,6 @@
 </head>
 
 <body>
-    <?php
-    session_start();
-    if (isset($_SESSION['utilizador'])) {
-        header("Refresh:0; url=PgUtilizador.php");
-    } 
-    ?>
-
     <div id="container">
         <div id="header">
             <img class="logo" src="logo.png" alt="">
@@ -30,24 +31,25 @@
             <div id="aviso">
                 <p>Deve fazer login ou registar-se para conseguir fazer uma marcação!</p>
             </div>
-            <div id="login-box">
-                <div id="login-cabecalho">Login</div>
-                <form action="login.php" method="POST">
-                    <div class="input-div" id="input-form">
-                        Nome de utilizador:
-                        <input type="text" name="user" />
+            <div class="login-box">
+                <h1 class="login-title">Login</h1>
+                <form class="login-form" action="login.php" method="POST">
+                    <div class="input-box">
+                        <input type="text" name="user" placeholder="Nome de utilizador" />
                     </div>
-                    <div class="input-div" id="input-form">
-                        Password:
-                        <input type="password" name="pass" />
+                    <div class="input-box">
+                        <input type="password" name="pass" placeholder="Password" />
                     </div>
-                    <div id="acoes">
-                        <input type="submit" value="Login">
-                        <input type="submit" value="Criar Conta" formaction="PgRegisto.php">
-                        <br><br>
-                        <div id="volta"><a href="index.php">Voltar à Página Principal</a></div>
+                    <button class="form-btn" type="submit">
+                        Login
+                    </button>
+                    <div style="text-align: center">
+                        Ainda não tem conta?<br><a style="font-weight: bold" href="PgRegisto.php">Crie uma agora!</a>
                     </div>
                 </form>
+            </div>
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <a class="go-back-btn" href="index.php">Voltar à Página Principal</a>
             </div>
         </div>
         <div id="footer">
