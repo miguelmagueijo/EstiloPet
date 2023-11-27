@@ -31,13 +31,30 @@
             <div id="aviso">
                 <p>Deve fazer login ou registar-se para conseguir fazer uma marcação!</p>
             </div>
+            <?php
+                $invalidUser = isset($_GET["bad_user"]);
+
+                if ($invalidUser) {
+                    echo "
+                        <div class='form-warning error'>
+                            Dados de utilizador inválidos!
+                        </div>
+                    ";
+                } else if (isset($_GET["not_validated"])) {
+                    echo "
+                        <div class='form-warning'>
+                            Utilizador ainda não validado!
+                        </div>
+                    ";
+                }
+            ?>
             <div class="login-box">
                 <h1 class="login-title">Login</h1>
                 <form class="login-form" action="login.php" method="POST">
-                    <div class="input-box">
+                    <div class="input-box <?php if ($invalidUser) echo 'invalid' ?>">
                         <input type="text" name="user" placeholder="Nome de utilizador" />
                     </div>
-                    <div class="input-box">
+                    <div class="input-box <?php if ($invalidUser) echo 'invalid' ?>">
                         <input type="password" name="pass" placeholder="Password" />
                     </div>
                     <button class="form-btn" type="submit">
