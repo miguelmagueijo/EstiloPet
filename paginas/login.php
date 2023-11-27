@@ -32,7 +32,7 @@
     if ($result->num_rows == 1) {
         $userData = $result->fetch_assoc();
 
-        include_once "tiposUtilizadores.php";
+        include_once("tiposUtilizadores.php");
 
         if ($userData["tipoUtilizador"] == CLIENTE_POR_VALIDAR) {
             header("Location: PgLogin.php?not_validated");
