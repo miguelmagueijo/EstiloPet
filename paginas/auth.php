@@ -19,7 +19,7 @@
     }
 
     session_start();
-    if(!isset($_SESSION["utilizador"])) {
+    if(!isset($_SESSION["utilizador"])) { // TODO use userId, utilizador will be deprecated
         return;
     }
 
