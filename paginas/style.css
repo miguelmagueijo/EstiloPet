@@ -68,23 +68,6 @@ ul#nav a {
     border-top: 5px solid #F90;
 }
 
-#registo-box {
-    background-color: #7c7c7c83;
-    width: 380px;
-    height: 640px;
-    margin: 70px auto 0px;
-    overflow: hidden;
-    box-shadow: 0px 0px 5px #6F6666;
-}
-
-#registo-box-func {
-    background-color: #f5f5f5;; ;;
-    width: 380px;
-    height: 530px;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
 #editar-dados-box {
     background-color: #7c7c7c83;
     width: 380px;
