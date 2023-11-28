@@ -8,6 +8,11 @@
 
     $auth_userType = -1;
 
+    function auth_isLogged() {
+        global $auth_userType;
+        return $auth_userType != -1;
+    }
+
     function auth_isAdmin() {
         global $auth_userType;
         return $auth_userType == ADMIN;

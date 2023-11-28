@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if (isset($_SESSION['utilizador'])) {
+    if (isset($_SESSION["userId"])) {
         header("Refresh:0; url=PgUtilizador.php");
         die();
     }
@@ -48,9 +48,9 @@
                     ";
                 }
             ?>
-            <div class="login-box">
-                <h1 class="login-title">Login</h1>
-                <form class="login-form" action="login.php" method="POST">
+            <div class="login-register-box">
+                <h1 class="login-register-title">Login</h1>
+                <form class="login-register-form" action="login.php" method="POST">
                     <div class="input-box <?php if ($invalidUser) echo 'invalid' ?>">
                         <input type="text" name="user" placeholder="Nome de utilizador" />
                     </div>
