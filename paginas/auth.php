@@ -8,13 +8,18 @@
 
     $auth_userType = -1;
 
+    function auth_isLogged() {
+        global $auth_userType;
+        return $auth_userType != -1;
+    }
+
     function auth_isAdmin() {
         global $auth_userType;
         return $auth_userType == ADMIN;
     }
 
     session_start();
-    if(!isset($_SESSION["utilizador"])) {
+    if(!isset($_SESSION["utilizador"])) { // TODO use userId, utilizador will be deprecated
         return;
     }
 

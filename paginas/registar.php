@@ -1,90 +1,55 @@
 <?php
-session_start();
+    include_once("auth.php");
 
-include "tiposUtilizadores.php";
-include('../basedados/basedados.h');
-
-if (isset($_SESSION['utilizador'])) {
-                if (($_SESSION['tipo']) == ADMIN || ($_SESSION['tipo']) == FUNC) {
-
-        //variaveis de sessão
-        $tipoUtilizador = $_SESSION["tipo"];
-
-        //variaveis do formulario
-        $nomeUser = $_POST["username"];
-        $morada = $_POST["morada"];
-        $email = $_POST["email"];
-        $telemovel = $_POST["telemovel"];
-        $pass = $_POST["pass"];
-        $confPass = $_POST["ConfPass"];
-
-        //o funcionario so pode criar clientes
-        if ($tipoUtilizador == FUNC) {
-            $sql = "INSERT INTO `user` (`nomeUser`, `morada`, `email`, `telemovel`, `pass`, `tipoUtilizador`) 
-                    VALUES ('" . $nomeUser . "', '" . $morada . "','" . $email . "','" . $telemovel . "','" . md5($pass) . "', '2');";
-            try {
-                $res = mysqli_query($conn, $sql);
-
-                echo "Cliente registado com sucesso! <br> Pode efetuar marcações";
-                header("Refresh:2; url=PgUtilizador.php");
-            } catch (Exception $e) {
-                echo "Não foi possível registar o utilizador";
-                header("Refresh:1; url=PgUtilizador.php");
-            }
-        } else if ($tipoUtilizador == ADMIN) {
-            $sql = "INSERT INTO `user` (`nomeUser`, `morada`, `email`, `telemovel`, `pass`, `tipoUtilizador`) 
-                    VALUES ('" . $nomeUser . "', '" . $morada . "','" . $email . "','" . $telemovel . "','" . md5($pass) . "', '3');";
-            try {
-                $res = mysqli_query($conn, $sql);
-                echo "Registado com sucesso! <br> Faça a validação do utilizador.";
-                header("Refresh:2; url=PgUtilizador.php");
-            } catch (Exception $e) {
-                echo "Não foi possível registar o utilizador";
-                header("Refresh:1; url=PgUtilizador.php");
-            }
-        }
-    } else {
-        header("Refresh:0; url=PgUtilizador.php");
-    }
-} else {
-    if (!(isset($_POST["username"]) || isset($_POST["morada"]) || isset($_POST["email"]) || isset($_POST["morada"]) || isset($_POST["telemovel"])
-            || isset($_POST["pass"]) || isset($_POST["ConfPass"]))) {
-
-        header("Refresh:0; url=PgRegisto.php");
-    } else {
-        //variaveis do formulario
-        $nomeUser = $_POST["username"];
-        $morada = $_POST["morada"];
-        $email = $_POST["email"];
-        $telemovel = $_POST["telemovel"];
-        $pass = $_POST["pass"];
-        $confPass = $_POST["ConfPass"];
-
-        if (!(empty($nomeUser) || empty($morada) || empty($email) || empty($telemovel || empty($pass)) || empty($confPass))) {
-            if ($pass != $confPass) {
-                echo '<p>Passwords não correspondem!</p>';
-                header("Refresh:1; url=PgRegisto.php");
-            } else {
-                $sql = "INSERT INTO `user` (`nomeUser`, `morada`, `email`, `telemovel`, `pass`, `tipoUtilizador`) 
-                        VALUES ('" . $nomeUser . "', '" . $morada . "','" . $email . "','" . $telemovel . "','" . md5($pass) . "', '3');";
-                try {
-                    $res = mysqli_query($conn, $sql);
-
-                    echo "Registado com sucesso! <br> Aguarde validação do Administrador.";
-                    header("Refresh:2; url=PgLogin.php");
-
-                } catch (Exception $e) {
-                    echo "Não foi possível registar o utilizador";
-                    header("Refresh:1; url=PgRegisto.php");
-                }
-            }
-        } else {
-            echo "Por favor preencha todos os campos!";
-            header("Refresh:1; url=PgRegisto.php");
-        }
-
+    if (isset($auth_userType) && $auth_userType == CLIENTE) {
+        header("Location: PgUtilizador.php");
+        die();
     }
 
-}
+    $redirectPageName = auth_isLogged() ? "PgUtilizador.php" : "PgRegisto.php";
+    $invalidFields = array();
 
+    if (!isset($_POST["username"]) || strlen($_POST["username"]) <= 2) {
+        $invalidFields[] = "inv_nome";
+    }
+
+    if (!isset($_POST["morada"]) || strlen($_POST["morada"]) <= 2) {
+        $invalidFields[] = "inv_morada";
+    }
+
+    if (!isset($_POST["email"]) || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+        $invalidFields[] = "inv_email";
+    }
+
+    if (!isset($_POST["telemovel"]) || strlen($_POST["telemovel"]) < 9) {
+        $invalidFields[] = "inv_telemovel";
+    }
+
+    if (!isset($_POST["pass"]) || strlen($_POST["pass"]) <= 2) {
+        $invalidFields[] = "inv_password";
+    }
+
+    if (!isset($_POST["ConfPass"]) || strlen($_POST["ConfPass"]) <= 2 || strcmp($_POST["pass"], $_POST["ConfPass"]) != 0) {
+        $invalidFields[] = "inv_confirmacao_password";
+    }
+
+    if (count($invalidFields) > 0) {
+        header("Location: $redirectPageName?".implode("&", $invalidFields));
+        die();
+    }
+
+    $userTypeId = auth_isLogged() ? CLIENTE : CLIENTE_POR_VALIDAR;
+
+    /* @var $conn mysqli */
+    $stmt = $conn->prepare("INSERT INTO `user` (`nomeUser`, `morada`, `email`, `telemovel`, `pass`, `tipoUtilizador`)
+                            VALUES (?, ?, ?, ?, MD5(?), $userTypeId)");
+
+    $stmt->bind_param("sssss", $_POST["username"], $_POST["morada"], $_POST["email"], $_POST["telemovel"], $_POST["pass"]);
+
+    if (!$stmt->execute() || $stmt->affected_rows == 0) {
+        header("Location: $redirectPageName?create_error");
+        die();
+    }
+
+    header("Location: $redirectPageName?success");
 ?>
