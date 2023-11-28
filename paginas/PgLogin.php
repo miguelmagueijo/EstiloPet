@@ -27,10 +27,7 @@
                 <li><a href="contactos.php">Contactos</a></li>
             </ul>
         </div>
-        <div>
-            <div id="aviso">
-                <p>Deve fazer login ou registar-se para conseguir fazer uma marcação!</p>
-            </div>
+        <div style="margin-top: 2rem;">
             <?php
                 $invalidUser = isset($_GET["bad_user"]);
 

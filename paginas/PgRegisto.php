@@ -28,7 +28,7 @@
                 <li><a href="contactos.php">Contactos</a></li>
             </ul>
         </div>
-        <div>
+        <div style="margin-top: 2rem;">
             <?php
                 $invalidUser = isset($_GET["bad_user"]);
 
