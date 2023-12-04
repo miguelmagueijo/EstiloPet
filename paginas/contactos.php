@@ -9,43 +9,11 @@
 </head>
 
 <body>
+    <?php
+        $CURR_PAGE_NAME = "contacts";
+        include_once("navbar.php");
+    ?>
     <div id="container">
-        <?php
-        session_start();
-
-        include "tiposUtilizadores.php";
-
-        if (isset($_SESSION["utilizador"])) {
-
-            $tipoUtilizador = $_SESSION["tipo"];
-
-            //$utilizador = $_SESSION["utilizador"];
-            if ($tipoUtilizador == CLIENTE_POR_VALIDAR /*FALTA VEREIFICAR O CLIENTE APAGADO*/) {
-                header("Refresh:2; url=logout.php");
-            } else {
-                echo "<div id='header'>
-                            <img class='logo' src='logo.png' alt=''>
-                            <h1>Estilo Pet</h1>
-                            <ul id='nav'>
-                                <li><a href='index.php'>Home</a></li>
-                                <li><a href='PgDadosPessoais.php'>Dados Pessoais</a></li>
-                                <li><a href='contactos.php' class='activa'>Contactos</a></li>
-                                <li id='logout'><a href='logout.php'>Logout</a></li>
-                            </ul>
-                        </div>";
-            }
-        } else {
-            echo '<div id="header">
-                        <img class="logo" src="logo.png" alt="">
-                        <h1>Estilo Pet</h1>
-                        <ul id="nav">
-                            <li><a href="index.php">Home</a></li>
-                            <li><a href="PgLogin.php">Login</a></li>
-                            <li><a href="contactos.php"class="activa">Contactos</a></li>
-                        </ul>
-                    </div>';
-        }
-        ?>
         <div class="divisao">
             <div class="left">
                 <h4>Localização</h4>

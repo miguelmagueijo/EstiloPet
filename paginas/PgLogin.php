@@ -1,9 +1,7 @@
 <?php
-    session_start();
-    if (isset($_SESSION["userId"])) {
-        header("Refresh:0; url=PgUtilizador.php");
-        die();
-    }
+    include_once("auth.php");
+    redirectToIfLogged("PgUtilizador.php");
+    $CURR_PAGE_NAME = "login";
 ?>
 
 <!DOCTYPE html>
@@ -17,16 +15,10 @@
 </head>
 
 <body>
+    <?php
+        include_once("navbar.php");
+    ?>
     <div id="container">
-        <div id="header">
-            <img class="logo" src="logo.png" alt="">
-            <h1>Estilo Pet</h1>
-            <ul id="nav">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="PgLogin.php" class="activa">Login</a></li>
-                <li><a href="contactos.php">Contactos</a></li>
-            </ul>
-        </div>
         <div style="margin-top: 2rem;">
             <?php
                 $invalidUser = isset($_GET["bad_user"]);

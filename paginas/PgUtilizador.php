@@ -32,20 +32,8 @@
 
             $row = mysqli_fetch_array($res);
 
-            if ($tipoUtilizador == CLIENTE_POR_VALIDAR) {
-                header("Refresh:2; url=logout.php");
-            } else {
-                echo "  <div id='header'>
-                            <img class='logo' src='logo.png' alt=''>
-                            <h1>Estilo Pet</h1>
-                            <ul id='nav'>
-                                <li><a href='index.php' class='activa'>Home</a></li>
-                                <li><a href='PgDadosPessoais.php'>Dados Pessoais</a></li>
-                                <li><a href='contactos.php'>Contactos</a></li>
-                                <li id='logout'><a href='logout.php'>Logout</a></li>
-                            </ul>
-                        </div>";
-            }
+            $CURR_PAGE_NAME = "user_page";
+            include_once("navbar.php");
             
             //cada tipo de utilizador tem um layout diferente
             switch ($row["tipoUtilizador"]) {

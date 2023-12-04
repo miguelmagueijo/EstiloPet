@@ -1,118 +1,100 @@
+<?php
+    include_once("auth.php");
+    redirectToIfNotAdmin();
+
+    if (!isset($_GET["idUser"])) {
+        header("Location: PgUtilizador.php");
+        die();
+    }
+
+    $clientId = $_GET["idUser"];
+
+    /* @var $conn mysqli */
+    $stmt = $conn->prepare("SELECT * FROM user WHERE idUser = ?");
+    $stmt->bind_param("i", $clientId);
+
+    if (!$stmt->execute()) {
+        header("Refresh: 5; url=PgUtilizador.php");
+        die("Não foi possivel obter os dados do utilizador...");
+    }
+
+    $res = $stmt->get_result();
+
+    if (!$res || $res->num_rows == 0) {
+        header("Location: PgUtilizador.php");
+        die();
+    }
+
+    $clientData = $res->fetch_assoc();
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
+    <head>
+        <meta charset="UTF-8">
+        <title>Estilo Pet</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="stylesheet" type="text/css" href="estilo.css" />
+        <style>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Estilo Pet</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <link rel="stylesheet" type="text/css" href="estilo.css" />
-    <link rel="stylesheet" type="text/css" href="estiloPgUtilizador.css" />
-</head>
-
-<body>
-    <div id="container">
+        </style>
+    </head>
+    <body>
         <?php
-        session_start();
-
-        if (isset($_SESSION["utilizador"])) {
-            //variaveis de sessão
-            $utilizador = $_SESSION["utilizador"];
-            $tipoUtilizador = $_SESSION["tipo"];
-            $idUser = $_SESSION["id"];
-
-            //variaveis do formulario
-            $idCliente = $_GET["idUser"];
-
-            include('../basedados/basedados.h');
-            include "tiposUtilizadores.php";
-
-            if ($tipoUtilizador != ADMIN) {
-                echo "Não pode editar dados de outro utilizador!";
-                header("Refresh:1; url=logout.php");
-            } else {
-                $sql = "SELECT * FROM user WHERE idUser = '". $idCliente ."'";
-
-                $res = mysqli_query($conn, $sql);
-
-                $row = mysqli_fetch_array($res);
-                   
-                    echo "  <div id='header'>
-                                <img class='logo' src='logo.png' alt=''>
-                                <h1>Estilo Pet</h1>
-                                <ul id='nav'>
-                                    <li><a href='PgUtilizador.php'>Voltar</a></li>
-                                    <li><a href='PgDadosPessoais.php'>Dados Pessoais</a></li>
-                                    <li><a href='contactos.php'>Contactos</a></li>
-                                    <li id='logout'><a href='logout.php'>Logout</a></li>
-                                </ul>      
-                            </div>";
-                    echo '
-                            <div id="body-accordion">
-                                <button class="accordion active">
-                                    <h3>Editar Dados do Utilizador</h3>
-                                </button>
-                                <div class="panel" style="display: block;">
-                                    <div id="registo-box-func">
-                                        <form action="editarDados.php" method="POST">
-                                            <div class="input-div" id="input-form">
-                                                Nome de utilizador:
-                                                <input type="text" name="username" value="' . $row["nomeUser"] . '" required/>
-                                            </div>
-                                            <div class="input-div" id="input-form">
-                                                Morada:
-                                                <input type="text" name="morada" value="' . $row["morada"] . '" required/>
-                                            </div>
-                                            <div class="input-div" id="input-form">
-                                                E-mail:
-                                                <input type="e-mail" name="email" value="' . $row["email"] . '" required/>
-                                            </div>
-                                            <div class="input-div" id="input-form">
-                                                Contacto:
-                                                <input type="tel" name="telemovel" value="' . $row["telemovel"] . '"required/>
-                                            </div>
-                                            <div class="input-div" id="input-form">
-                                                Tipo de Utilizador:
-                                                <select id="cliente" name="tipoUtilizador" required>
-                                                    <option value="">Selecione o tipo de utilizador</option>';                             
-                if($row["tipoUtilizador"] == 0) {
-                    echo'                       <option value="0"selected>Administrador</option>
-                                                    <option value="1">Funcionário</option>
-                                                    <option value="2">Cliente</option>
-                                                    <option value="3">Cliente por validar</option>';
-                } else if ($row["tipoUtilizador"] == 1) {
-                    echo'                       <option value="0">Administrador</option>
-                                                    <option value="1"selected>Funcionário</option>
-                                                    <option value="2">Cliente</option>
-                                                    <option value="3">Cliente por validar</option>';
-                } else if ($row["tipoUtilizador"] == 2) {
-                    echo'                       <option value="0">Administrador</option>
-                                                    <option value="1">Funcionário</option>
-                                                    <option value="2"selected>Cliente</option>
-                                                    <option value="3">Cliente por validar</option>';
-                } else if ($row["tipoUtilizador"] == 3){
-                    echo'                       <option value="0">Administrador</option>
-                                                    <option value="1">Funcionário</option>
-                                                    <option value="2">Cliente</option>
-                                                    <option value="3"selected>Cliente por validar</option>';
-                }                                  
-                echo '                         </select>
-                                            </div>
-                                            <div id="acoes">
-                                                <input type="hidden" name="idUser" value="'. $idCliente .'">
-                                                <input type="submit" value="Guardar">
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>';
-            }
-        }
+            include_once("navbar.php");
         ?>
-
+        <div class="edit-content-container">
+            <h2>Editar Dados do Utilizador</h2>
+            <form action="editarDados.php" method="POST">
+                <div class="input-box">
+                    <label>
+                        Nome de utilizador
+                        <input type="text" name="username" value="<?php echo $clientData['nomeUser'] ?>" minlength="3" required/>
+                    </label>
+                </div>
+                <div class="input-box">
+                    <label>
+                        Morada
+                        <input type="text" name="morada" value="<?php echo $clientData['morada'] ?>" minlength="3"  required/>
+                    </label>
+                </div>
+                <div class="input-box">
+                    <label>
+                        E-mail
+                        <input type="email" name="email" value="<?php echo $clientData['email'] ?>" required/>
+                    </label>
+                </div>
+                <div class="input-box">
+                    <label>
+                        Contacto
+                        <input type="tel" name="telemovel" value="<?php echo $clientData['telemovel'] ?>" required/>
+                    </label>
+                </div>
+                <div class="input-box">
+                    <label>
+                        Tipo de Utilizador
+                        <select id="cliente" name="tipoUtilizador" required>
+                            <option value="" disabled>Selecione o tipo de utilizador</option>';
+                            <option value="<?php echo ADMIN ?>" <?php echo $clientData['tipoUtilizador'] === ADMIN ? "selected" : null ?>>Administrador</option>
+                            <option value="<?php echo FUNC ?>" <?php echo $clientData['tipoUtilizador'] === FUNC ? "selected" : null ?>>Funcionário</option>
+                            <option value="<?php echo CLIENTE ?>" <?php echo $clientData['tipoUtilizador'] === CLIENTE ? "selected" : null ?>>Cliente</option>
+                            <option value="<?php echo CLIENTE_POR_VALIDAR ?>" <?php echo $clientData['tipoUtilizador'] === CLIENTE_POR_VALIDAR ? "selected" : null ?>>Cliente por validar</option>
+                        </select>
+                    </label>
+                </div>
+                <input type="hidden" name="idUser" value="<?php echo $clientId ?>">
+                <button class="form-btn" type="submit">
+                    Guardar alterações
+                </button>
+            </form>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a class="go-back-btn" href="PgUtilizador.php">
+                Voltar atrás
+            </a>
+        </div>
         <div id="footer">
             <p id="esq">Realizado por Ana Correia & Clara Aidos</p>
         </div>
-    </div>
-</body>
-
+    </body>
 </html>

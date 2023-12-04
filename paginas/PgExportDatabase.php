@@ -16,10 +16,6 @@
         <link rel="stylesheet" type="text/css" href="estilo.css" />
 
         <style>
-            * {
-                margin: 0;
-            }
-
             .main-container {
                 width: 80%;
                 margin: 0 auto;
@@ -55,10 +51,10 @@
     </head>
 
     <body>
+        <?php include_once("navbar.php"); ?>
         <h1 style="margin: 2rem 0; text-align: center;">
             Exportação da base de dados para XML
         </h1>
-
         <main class="main-container">
             <div>
                 <h2 style="margin-bottom: 1rem;">Código</h2>

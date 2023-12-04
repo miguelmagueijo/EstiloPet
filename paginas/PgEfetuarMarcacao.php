@@ -10,9 +10,11 @@
 </head>
 
 <body>
+    <?php
+        include_once("navbar.php");
+    ?>
     <div id="container">
         <?php
-        session_start();
 
         if (isset($_SESSION["utilizador"])) {
             //variaveis de sessão
@@ -23,22 +25,9 @@
             //variaveis do formulario
             $idCliente = $_GET["idCliente"];
 
-            include('../basedados/basedados.h');
-            include "tiposUtilizadores.php";
-
             if ($tipoUtilizador == CLIENTE_POR_VALIDAR /*FALTA VEREIFICAR O CLIENTE APAGADO*/) {
                 header("Refresh:2; url=logout.php");
             } else {
-                echo "  <div id='header'>
-                                <img class='logo' src='logo.png' alt=''>
-                                <h1>Estilo Pet</h1>
-                                <ul id='nav'>
-                                    <li><a href='PgUtilizador.php'>Voltar</a></li>
-                                    <li><a href='PgDadosPessoais.php'>Dados Pessoais</a></li>
-                                    <li><a href='contactos.php'>Contactos</a></li>
-                                    <li id='logout'><a href='logout.php'>Logout</a></li>
-                                </ul>  
-                            </div>";
                 echo '      <div id="body-accordion">
                                 <button class="accordion active">
                                     <h3>Efetuar Marcação</h3>
