@@ -2,6 +2,7 @@
     include_once('../basedados/basedados.h');
     include_once("tiposUtilizadores.php");
 
+    /* @var $conn mysqli */
     if (!isset($conn) || !$conn->ping()) {
         die("Database failure, please contact the admin.");
     }
@@ -18,19 +19,58 @@
         return $auth_userType == ADMIN;
     }
 
-    session_start();
-    if(!isset($_SESSION["utilizador"])) { // TODO use userId, utilizador will be deprecated
+    function auth_isWorker() {
+        global $auth_userType;
+        return $auth_userType == FUNC;
+    }
+
+    function auth_isClient() {
+        global $auth_userType;
+        return $auth_userType == CLIENTE;
+    }
+
+    function redirectToIfNotAdmin($location = "index.php") {
+        if (!auth_isAdmin()) {
+            header("Location: $location");
+            die();
+        }
+    }
+
+    function redirectToIfNotLogged($location = "index.php") {
+        if (!auth_isLogged()) {
+            header("Location: $location");
+            die();
+        }
+    }
+
+    function redirectToIfLogged($location = "index.php") {
+        if (auth_isLogged()) {
+            header("Location: $location");
+            die();
+        }
+    }
+
+    if (session_status() != PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+
+    if(!isset($_SESSION["userId"])) {
         return;
     }
 
     $stmt = $conn->prepare("SELECT tipoUtilizador FROM user WHERE idUser = ?");
-    $stmt->bind_param("i", $_SESSION["id"]);
+    $stmt->bind_param("i", $_SESSION["userId"]);
 
     if (!$stmt->execute()) {
         die("AUTH: Could not get data.");
     }
 
     $auth_userType = $stmt->get_result()->fetch_assoc()["tipoUtilizador"];
+
+    if ($auth_userType === null || $auth_userType == CLIENTE_POR_VALIDAR) {
+        header("Location: logout.php");
+        die();
+    }
 
     unset($stmt);
 ?>

@@ -1,3 +1,38 @@
+<?php
+    include_once("auth.php");
+    redirectToIfNotLogged();
+
+    if (!isset($_GET["idCliente"])) {
+        header("Location: PgUtilizador.php");
+        die();
+    }
+
+    $clientId = $_GET["idCliente"];
+
+    /* @var $conn mysqli */
+    $stmt = $conn->prepare("SELECT nomeUser, tipoUtilizador FROM user WHERE idUser = ?");
+    $stmt->bind_param("i", $clientId);
+
+    if (!$stmt->execute()) {
+        header("Refresh: 5; url=PgUtilizador.php");
+        die("Não foi possivel obter os dados do utilizador...");
+    }
+
+    $res = $stmt->get_result();
+
+    if (!$res || $res->num_rows == 0) {
+        header("Location: PgUtilizador.php");
+        die();
+    }
+
+    $clientData = $res->fetch_assoc();
+
+    if ($clientData["tipoUtilizador"] != CLIENTE) {
+        header("Location: PgUtilizador.php");
+        die();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -6,86 +41,62 @@
     <title>Estilo Pet</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="stylesheet" type="text/css" href="estilo.css" />
-    <link rel="stylesheet" type="text/css" href="estiloPgUtilizador.css" />
 </head>
 
 <body>
     <?php
-    session_start();
-
-    if (isset($_SESSION["utilizador"])) {
-        //variaveis de sessão
-        $utilizador = $_SESSION["utilizador"];
-        $tipoUtilizador = $_SESSION["tipo"];
-        $idUser = $_SESSION["id"];
-
-        if (!(isset($_GET["idCliente"]))) {
-            header("Refresh:0; url=PgUtilizador.php");
-        } else {
-            //variaveis do formulario
-            $idCliente = $_GET["idCliente"];
-
-            include('../basedados/basedados.h');
-            include "tiposUtilizadores.php";
-
-            if ($tipoUtilizador == CLIENTE_POR_VALIDAR) {
-                header("Refresh:2; url=logout.php");
-            } else {
-                if ($idUser != $idCliente && ($tipoUtilizador == FUNC || $tipoUtilizador == ADMIN)) {
-                    echo "  <div id='header'>
-                            <img class='logo' src='logo.png' alt=''>
-                            <h1>Estilo Pet</h1>
-                            <ul id='nav'>
-                                <li><a href='PgUtilizador.php'>Voltar</a></li>
-                                <li><a href='PgDadosPessoais.php'>Dados Pessoais</a></li>
-                                <li><a href='contactos.php'>Contactos</a></li>
-                                <li id='logout'><a href='logout.php'>Logout</a></li>
-                            </ul>  
-                        </div>";
-                    echo '  
-                    <div id="container">
-                        <div id="body-accordion">
-                            <button class="accordion active">
-                                <h3>Registar Animal</h3>
-                            </button>
-                            <div class="panel" style="display: block;">       
-                                <div id="form-registar-animal">
-                                    <form action="registarAnimal.php" method="GET">
-                                        <label for="nome-animal">Nome do Animal:</label>
-                                        <input type="text" id="nome-animal" name="nome-animal" required><br><br>
-                                        <div>
-                                            <label>Tipo de Animal:</label>
-                                            <input type="radio" id="cao" name="tipo-animal" value="cao">Cão</input>
-                                            <input type="radio" id="gato" name="tipo-animal" value="gato"/>Gato</input> 
-                                        </div>
-                                        <label for="porte-animal">Porte:</label>
-                                        <select id="porte-animal" name="porte-animal">
-                                            <option value="grande">Grande</option>
-                                            <option value="medio">Médio</option>
-                                            <option value="pequeno">Pequeno</option>
-                                        </select><br><br>
-                                        <input type="hidden" id="nome-animal" name="idCliente" value="' . $idCliente . '">
-                                        <input type="submit" value="Registar">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>';
-                } else {
-                    echo "Utilizador inválido.";
-                    header("Refresh:1; url=PgUtilizador.php");
-                }
-            }
-        }
-
-    } else {
-        echo "Efetue login!";
-        header("Refresh:1; url=logout.php");
-    }
+        include_once("navbar.php");
     ?>
-    <div id="footer">
-        <p id="esq">Realizado por Ana Correia & Clara Aidos</p>
+    <div class="edit-content-container">
+        <h2>Registar Animal</h2>
+        <form action="registarAnimal.php" method="GET">
+            <div class="input-box">
+                <label>
+                    Nome do cliente
+                    <input type="text" name="useless" value="<?php echo $clientData['nomeUser'] ?>" disabled readonly>
+                </label>
+            </div>
+            <div class="input-box">
+                <label>
+                    Nome do Animal
+                    <input type="text" name="nome-animal" minlength="2" required>
+                </label>
+            </div>
+            <div class="input-box">
+                <label>
+                    Tipo de Animal
+                </label>
+                <div style="display: flex; align-items: center; gap: 2rem; margin-top: 0.5rem; font-size: 1.2rem">
+                    <div>
+                        Cão <input type="radio" name="tipo-animal" value="cao"/>
+                    </div>
+                    <div>
+                        Gato <input type="radio" name="tipo-animal" value="gato"/>
+                    </div>
+                </div>
+            </div>
+            <div class="input-box">
+                <label>
+                    Porte
+                    <select name="porte-animal">
+                        <option value="grande">Grande</option>
+                        <option value="medio">Médio</option>
+                        <option value="pequeno">Pequeno</option>
+                    </select>
+                </label>
+            </div>
+            <input type="hidden" name="idCliente" value="<?php echo $clientId ?>">
+            <button class="form-btn" type="submit">
+                Registar animal
+            </button>
+        </form>
     </div>
+    <div style="text-align: center; margin-top: 2rem;">
+        <a class="go-back-btn" href="PgUtilizador.php">
+            Voltar atrás
+        </a>
+    </div>
+    <?php include_once("footer.html") ?>
 </body>
 
 </html>

@@ -6,48 +6,14 @@
     <title>Estilo Pet</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="stylesheet" type="text/css" href="estilo.css" />
-
 </head>
 
 <body>
+    <?php
+        $CURR_PAGE_NAME = "index";
+        include_once("navbar.php");
+    ?>
     <div id="container">
-        <?php
-        session_start();
-
-        include "tiposUtilizadores.php";
-
-        if (isset($_SESSION["utilizador"])) {
-
-            $tipoUtilizador = $_SESSION["tipo"];
-            $utilizador = $_SESSION["utilizador"];
-
-            if ($tipoUtilizador == CLIENTE_POR_VALIDAR /*FALTA VEREIFICAR O CLIENTE APAGADO*/) {
-                header("Refresh:2; url=logout.php");
-            } else {
-                echo "<div id='header'>
-                            <img class='logo' src='logo.png' alt=''>
-                            <h1>Estilo Pet</h1>
-                            <ul id='nav'>
-                                <li><a href='PgUtilizador.php' class='activa'>Home</a></li>
-                                <li><a href='PgDadosPessoais.php'>Dados Pessoais</a></li>
-                                <li><a href='contactos.php'>Contactos</a></li>
-                                <li id='logout'><a href='logout.php'>Logout</a></li>
-                            </ul>
-                        </div>";
-            }
-        } else {
-            echo '<div id="header">
-                        <img class="logo" src="logo.png" alt="">
-                        <h1>Estilo Pet</h1>
-                        <ul id="nav">
-                            <li><a href="index.php"class="activa">Home</a></li>
-                            <li><a href="PgLogin.php">Login</a></li>
-                            <li><a href="contactos.php">Contactos</a></li>
-                        </ul>
-                    </div>';
-        }
-        ?>
-        </div>
         <div>
             <div class="banner">
                 <img src="tobby.jpg">
@@ -76,20 +42,10 @@
                     ele merece.
                 </p>
             </div>
-            <div id="marcacoes">
-                <?php 
-                    if (isset($_SESSION["utilizador"])) {
-                        if ($tipoUtilizador != CLIENTE_POR_VALIDAR){
-                            echo'<form action="PgUtilizador.php" method="GET">
-                                    <input type="submit" value="Fazer uma marcação">
-                                </form>';
-                        }
-                    } else {
-                        echo'<form action="PgLogin.php" method="GET">
-                                    <input type="submit" value="Fazer uma marcação">
-                                </form>';
-                    }
-                ?>
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <a class="goto-marcacoes-btn" href="<?php echo auth_isLogged() ? 'PgUtilizador.php' : 'PgLogin.php' ?>">
+                    Fazer uma marcação
+                </a>
             </div>
             <div id="table">
                 <h1>Tabela de Preços</h1>
@@ -139,10 +95,8 @@
             </div>
             <div id="contacto"><a href="contactos.php">Contactos</a></div>
         </div>
-        <div id="footer">
-            <p id="esq">Realizado por Ana Correia & Clara Aidos</p>
-        </div>
     </div>
+    <?php include_once("footer.html") ?>
 </body>
 
 </html>

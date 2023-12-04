@@ -1,9 +1,8 @@
 <?php
-    session_start();
-    if (isset($_SESSION["userId"])) {
-        header("Location: PgUtilizador.php");
-        die();
-    }
+    include_once("auth.php");
+    redirectToIfLogged("PgUtilizador.php");
+
+    $CURR_PAGE_NAME = "register";
 ?>
 
 <!DOCTYPE html>
@@ -17,17 +16,10 @@
 </head>
 
 <body>
+    <?php
+        include_once("navbar.php");
+    ?>
     <div id="container-registar">
-        <div id="header">
-            <img class="logo" src="logo.png" alt="">
-            <h1>Estilo Pet</h1>
-            <ul id="nav">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="PgLogin.php">Login</a></li>
-                <li><a href="PgRegisto.php" class="activa">Criar Conta</a></li>
-                <li><a href="contactos.php">Contactos</a></li>
-            </ul>
-        </div>
         <div style="margin-top: 2rem;">
             <?php
                 $invalidUser = isset($_GET["bad_user"]);
@@ -103,10 +95,8 @@
                 <a class="go-back-btn" href="index.php">Voltar à Página Principal</a>
             </div>
         </div>
-        <div id="footer">
-            <p>Realizado por Ana Correia & Clara Aidos</p>
-        </div>
     </div>
+    <?php include_once("footer.html") ?>
 </body>
 
 </html>

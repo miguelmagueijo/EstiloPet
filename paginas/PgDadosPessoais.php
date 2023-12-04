@@ -11,6 +11,7 @@
 <body>
     <?php
     session_start();
+    $CURR_PAGE_NAME = "personal_data";
 
     if (isset($_SESSION["utilizador"])) {
 
@@ -30,17 +31,10 @@
             $email = $row["email"];
             $telemovel = $row["telemovel"];
 
-            echo
-            "   <div id='header'>
-                    <img class='logo' src='logo.png' alt=''>
-                    <h1>Estilo Pet</h1>
-                    <ul id='nav'>
-                        <li><a href='PgUtilizador.php'>Voltar</a></li>
-                        <li><a href='PgDadosPessoais.php' class='activa'>Dados Pessoais</a></li>
-                        <li><a href='contactos.php'>Contactos</a></li>
-                        <li id='logout'><a href='logout.php'>Logout</a></li>
-                    </ul>
-                </div>
+
+            include_once("navbar.php");
+
+            echo "
                 <div id='container'>
                     <div id='editar-dados-box'>
                         <div id='login-cabecalho'>Editar Dados Pessoais</div>
@@ -75,9 +69,6 @@
                             </div>
                         </form>
                     </div>
-                </div>
-                <div id='footer'>
-                    <p id='esq'>Realizado por Ana Correia & Clara Aidos</p>
                 </div>";
         } else {
             echo "Algo correu mal...";
@@ -87,6 +78,8 @@
         echo "Efetue login!";
         header("Refresh:1; url=logout.php");
     }
+
+    include_once("footer.html");
     ?>
 </body>
 
