@@ -95,10 +95,8 @@
             </div>
             <div id="contacto"><a href="contactos.php">Contactos</a></div>
         </div>
-        <div id="footer">
-            <p id="esq">Realizado por Ana Correia & Clara Aidos</p>
-        </div>
     </div>
+    <?php include_once("footer.html") ?>
 </body>
 
 </html>

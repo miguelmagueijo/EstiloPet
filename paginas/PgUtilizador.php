@@ -512,11 +512,7 @@
             ";
         ?>
 
-        <div id="footer">
-            <p id="esq">Realizado por Ana Correia & Clara Aidos</p>
-        </div>
-    </div>
-
+    <?php include_once("footer.html") ?>
     <!-- TODO: remove accordion, adopt menu-box -->
     <script>
         const menuChoices = document.getElementsByClassName("menu-box");

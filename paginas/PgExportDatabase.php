@@ -120,6 +120,7 @@
                 xmlCodeElement.innerText = xmlCodeElement.innerText.trim();
             </script>
         </main>
+        <?php include_once("footer.html") ?>
     </body>
 </html>
 

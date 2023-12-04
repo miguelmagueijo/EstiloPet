@@ -95,10 +95,8 @@
                 <a class="go-back-btn" href="index.php">Voltar à Página Principal</a>
             </div>
         </div>
-        <div id="footer">
-            <p>Realizado por Ana Correia & Clara Aidos</p>
-        </div>
     </div>
+    <?php include_once("footer.html") ?>
 </body>
 
 </html>

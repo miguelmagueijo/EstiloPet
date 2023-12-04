@@ -256,6 +256,81 @@ nav {
 ########################################################################################################################
 ########################################################################################################################
 */
+/*
+########################################################################################################################
+Footer
+########################################################################################################################
+*/
+footer {
+    width: 100vw;
+    margin: 3rem 0;
+    box-sizing: border-box;
+}
+
+.footer {
+    width: 80%;
+    margin: 1rem auto 0 auto;
+    padding: 1rem;
+    border: 2px solid #422006;
+    color: #422006;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.footer-main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-head {
+    display: flex;
+    gap: 0 1.25rem;
+    align-items: center;
+}
+
+.footer-logo {
+    height: 35px;
+    width: 35px;
+}
+
+.footer-title {
+    display: block;
+    font-size: 1.35rem;
+    font-weight: bold;
+}
+
+.footer-content-container {
+    font-size: 1rem;
+}
+
+.footer-sub-container {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #422006;
+}
+
+.footer-github-link {
+    width: fit-content;
+    margin: 0 auto;
+    color: black;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0 0.5rem;
+}
+
+.footer-github-link:hover {
+    text-decoration: underline;
+}
+
+.footer-github-link img {
+    width: 25px;
+}
+/*
+########################################################################################################################
+########################################################################################################################
+*/
 
 .form-warning {
     width: 350px;

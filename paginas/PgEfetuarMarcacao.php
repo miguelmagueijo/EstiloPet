@@ -83,9 +83,7 @@
         }
         ?>
 
-        <div id="footer">
-            <p id="esq">Realizado por Ana Correia & Clara Aidos</p>
-        </div>
+        <?php include_once("footer.html") ?>
     </div>
 </body>
 

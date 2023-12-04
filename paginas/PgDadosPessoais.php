@@ -69,9 +69,6 @@
                             </div>
                         </form>
                     </div>
-                </div>
-                <div id='footer'>
-                    <p id='esq'>Realizado por Ana Correia & Clara Aidos</p>
                 </div>";
         } else {
             echo "Algo correu mal...";
@@ -81,6 +78,8 @@
         echo "Efetue login!";
         header("Refresh:1; url=logout.php");
     }
+
+    include_once("footer.html");
     ?>
 </body>
 

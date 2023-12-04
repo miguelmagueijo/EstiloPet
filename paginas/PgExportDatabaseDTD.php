@@ -118,6 +118,7 @@ if (!auth_isAdmin()) {
                 xmlCodeElement.innerText = xmlCodeElement.innerText.trim();
             </script>
         </main>
+        <?php include_once("footer.html") ?>
     </body>
 </html>
 
