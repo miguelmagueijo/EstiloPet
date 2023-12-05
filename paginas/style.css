@@ -271,8 +271,8 @@ footer {
     width: 80%;
     margin: 1rem auto 0 auto;
     padding: 1rem;
-    border: 2px solid #422006;
-    color: #422006;
+    border: 2px solid #432207;
+    color: #432207;
     border-radius: 5px;
     box-sizing: border-box;
 }
@@ -332,9 +332,7 @@ footer {
 ########################################################################################################################
 */
 
-.form-warning {
-    width: 350px;
-    margin: 0 auto 1rem auto;
+.form-warning, .edit-content-warning {
     font-weight: bold;
     border: 2px solid #eab308;
     border-radius: 5px;
@@ -344,13 +342,24 @@ footer {
     text-align: center;
 }
 
-.form-warning.error {
+.form-warning {
+    width: 350px;
+    margin: 0 auto 1rem auto;
+}
+
+.edit-content-warning {
+    width: 650px;
+    margin: 0 auto 2rem auto;
+    box-sizing: border-box;
+}
+
+.edit-content-warning.error, .form-warning.error {
     border: 2px solid #991b1b !important;
     background: #fecaca !important;
     color: #991b1b !important;
 }
 
-.form-warning.success {
+.edit-content-warning.success, .form-warning.success {
     border: 2px solid #166534 !important;
     background: #bbf7d0 !important;
     color: #166534 !important;
@@ -431,7 +440,7 @@ footer {
     font-weight: normal;
 }
 
-.input-box.invalid input {
+.input-box.invalid input, .input-box.invalid select {
     border-color: #ef4444;
 }
 
