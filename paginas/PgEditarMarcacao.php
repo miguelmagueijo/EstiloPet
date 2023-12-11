@@ -39,7 +39,7 @@
     $todayDate = strtotime(date("Y-m-d"));
 
     if ($todayDate >= strtotime($pageData["data"])) {
-        header("Refresh: 5; url=PgUtilizador.php");
+        header("Refresh: 3; url=PgUtilizador.php");
         die("Não pode atualizar marcações antigas ou do próprio dia.");
     }
 
