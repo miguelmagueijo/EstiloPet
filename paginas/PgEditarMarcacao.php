@@ -108,23 +108,21 @@
                 }
 
             ?>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_time']) ? 'invalid' : '' ?>">
                 <label>
                     Data
                     <input type="date" name="data" min="<?php echo $minPossibleDate ?>" value="<?php echo $pageData['data'] ?>" required/>
                 </label>
             </div>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_time']) ? 'invalid' : '' ?>">
                 <label>
                     Hora
                     <select name="hora">
                         <?php
-                            $horarios = array("09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "14:00",
-                            "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30");
+                            $horarios = array("09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+                                "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30");
 
                             $pageData["hora"] = substr($pageData["hora"], 0, 5);
-
-
 
                             foreach ($horarios as $hora) {
                                 echo "<option value='$hora' ". ($pageData["hora"] == $hora ? 'selected' : null) .">$hora</option>";

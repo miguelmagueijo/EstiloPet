@@ -1,109 +1,181 @@
-<html>
-
-<head>
-    <meta charset="UTF-8">
-</head>
-
-</html>
 <?php
-session_start();
+    include_once("auth.php");
 
-include('../basedados/basedados.h');
-include "tiposUtilizadores.php";
+    redirectToIfNotLogged();
 
-if (isset($_SESSION["utilizador"])) {
-
-    //variavel de sessao
-    $idUser = $_SESSION["id"];
-    $tipoUtilizador = $_SESSION["tipo"];
-
-    //variaveis do formulario
-    $data = $_GET["data"];
-    $hora = $_GET["hora"];
-    $tratamento = $_GET["tipo-marcacao"];
-    $animal = $_GET["tipo-animal"]; //idAnimal
-
-    //buscar à bd o tipo do animal
-    $query_animal = "SELECT idUser, tipoAnimal FROM `animal` WHERE idAnimal = '" . $animal . "'";
-    $res_tipo = mysqli_query($conn, $query_animal);
-    $row = mysqli_fetch_array($res_tipo);
-
-    $tipoAnimal = $row["tipoAnimal"];
-    $donoAnimal = $row["idUser"];
-
-    //buscar à bd o ultimo id para no próximo adicionar 1 (autoincrement)
-    $query_id = "SELECT max(idMarcacao) FROM `marcacoes`";
-    $res_id = mysqli_query($conn, $query_id);
-    $row_id = mysqli_fetch_array($res_id);
-
-    $id = ($row_id == null) ? 1 : $row_id["max(idMarcacao)"] + 1;
-
-    //buscar à bd os funcionarios que fazem o servico
-    $query_func = "SELECT idUser FROM `servicos_func` WHERE tratamento = '" . $tratamento . "' AND tipoAnimal = '" . $tipoAnimal . "'";
-    $res_func = mysqli_query($conn, $query_func);
-
-    //guarda num array os func que fazem o servico
-    $funcs = array();
-    while ($result = mysqli_fetch_array($res_func)) {
-        $funcs[] = $result["idUser"];
+    if (!isset($_POST["idAnimal"])) {
+        header("Location: PgUtilizador.php");
+        die();
     }
 
-    //verificar na bd se esses func estão disponiveis a essa hora
-    $query_horario = "SELECT func FROM `marcacoes` WHERE data = '" . $data . "' and hora = '" . $hora . "'";
-    $ret = mysqli_query($conn, $query_horario);
-
-    //funcionarios que têm marcaçoes na hora e data selecionada
-    $func_ocupados = array();
-    while ($res_func_ocupados = mysqli_fetch_array($ret)) {
-        $func_ocupados[] = $res_func_ocupados["func"];
+    $clientId = $_POST["idCliente"];
+    $redirectPage = "PgEfetuarMarcacao.php?idCliente=$clientId&";
+    if (!auth_isAdmin() && !auth_isWorker()) {
+        $clientId = $_SESSION["userId"];
+        $redirectPage = "PgEfetuarMarcacao.php?";
     }
 
-    $func_disponiveis = array_values(array_filter(array_diff($funcs, $func_ocupados)));
+    $invalidFields = array();
 
-    //escolher um dos funcionários disponiveis
-    $func = rand(0, sizeof($func_disponiveis) - 1);
-
-    if (sizeof($func_disponiveis) == 0) {
-        echo "Não é possivél efetuar a marcação, tente outro horário.";
-        header("Refresh:1; url=PgUtilizador.php");
-
-    } else {
-        if (!(empty($data) || empty($hora) || empty($animal) || empty($tratamento))) {
-            if ($tipoUtilizador == FUNC || $tipoUtilizador == ADMIN) {
-                //variavel do form
-                $idCliente = $_GET["idCliente"];
-
-                $sql = "INSERT INTO `marcacoes` (`idMarcacao`, `data`, `hora`, `idAnimal` , `idUser`, `tratamento`, `func`) 
-                VALUES ('" . $id . "','" . $data . "', '" . $hora . "','" . $animal . "','" . $idCliente . "','" . $tratamento . "', '" . $func_disponiveis[$func] . "');";
-            } else {
-                $sql = "INSERT INTO `marcacoes` (`idMarcacao`, `data`, `hora`, `idAnimal` , `idUser`, `tratamento`, `func`) 
-                VALUES ('" . $id . "','" . $data . "', '" . $hora . "','" . $animal . "','" . $idUser . "','" . $tratamento . "', '" . $func_disponiveis[$func] . "');";
-            }
-            try {
-                if ($tipoUtilizador == CLIENTE && $idUser != $donoAnimal) {
-                    echo 'Não é possivel efetuar esta marcação';
-                    header("Refresh:1; url=PgUtilizador.php");
-                } else {
-                    $res = mysqli_query($conn, $sql);
-                    if (!$res) {
-                        die('Could not get data: ' . mysqli_error($conn)); // se não funcionar dá erro
-                    } else {
-                        echo "Marcação registada com sucesso!";
-                        header("Refresh:1; url=PgUtilizador.php");
-                    }
-                }
-            } catch (Exception $e) {
-                echo "Não foi possível efetuar esta marcação";
-                header("Refresh:1; url=PgUtilizador.php");
-            }
-        } else {
-            echo "Por favor preencha todos os campos!";
-            header("Refresh:1; url=PgUtilizador.php#marcacoes");
-        }
+    if (!isset($_POST["data"])) {
+        $invalidFields[] = "inv_data";
     }
 
-} else {
-    echo "Efetue login!";
-    header("Refresh:1; url=logout.php");
-}
+    if (!isset($_POST["hora"])) {
+        $invalidFields[] = "inv_hora";
+    }
+
+    if (!isset($_POST["tratamento"]) || !in_array($_POST["tratamento"], array("corte", "banho"))) {
+        $invalidFields[] = "inv_tratamento";
+    }
+
+    if (count($invalidFields) > 0) {
+        header("Location: $redirectPage".implode("&", $invalidFields));
+        die();
+    }
+
+    $data = $_POST["data"];
+    $hora = $_POST["hora"];
+    $tratamento = $_POST["tratamento"];
+    $animalId = $_POST["idAnimal"];
+
+
+    // ####### Time restriction
+    $appointmentTimeStart = strtotime($data . " " . $hora);
+    if (time() > $appointmentTimeStart) {
+        header("Location: $redirectPage"."inv_time");
+        die();
+    }
+    $durationInMinutes = $tratamento == "corte" ? 60 : 30;
+    $appointmentTimeEnd = strtotime($data . " " . $hora . " + $durationInMinutes minutes");
+
+    $startTime = date("H:i:s", $appointmentTimeStart);
+    $endTime = date("H:i:s", $appointmentTimeEnd);
+
+    if (strtotime("18:00:00") < strtotime($endTime)) {
+        $msg = "Não atendemos fora do horario de atendimento, marque para amanhã";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    // ##################
+    // Check if client owns the animal
+    // ##################
+    /* @var $conn mysqli */
+    $stmt = $conn->prepare("SELECT idUser, tipoAnimal  FROM animal WHERE idAnimal = ?");
+    $stmt->bind_param("i", $animalId);
+
+    if (!$stmt->execute()) {
+        $msg = "Houve um erro a consultar o animal da marcação";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    $res = $stmt->get_result();
+
+    if (!$res || $res->num_rows == 0) {
+        $msg = "Não foi possível encontrar o animal selecionado";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    $resAssoc = $res->fetch_assoc();
+
+    if ($clientId != $resAssoc["idUser"]) {
+        $msg = "Não pode efetuar marcações com animais de outros utilizadores";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+    // ##################
+
+    // ###### Get workers
+    $stmt = $conn->prepare("SELECT idUser FROM servicos_func WHERE tratamento = ? AND tipoAnimal = ?");
+    $stmt->bind_param("ss", $tratamento, $resAssoc["tipoAnimal"]);
+
+    if (!$stmt->execute()) {
+        $msg = "Não foi possivel consultar os funcionarios possiveis";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    $res = $stmt->get_result();
+
+    if (!$res || $res->num_rows == 0) {
+        $msg = "Não existem funcionarios para o novo tipo de serviço";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    $possibleWorkers = array();
+    while ($rowAssoc = $res->fetch_assoc()) {
+        $possibleWorkers[] = $rowAssoc["idUser"];
+    }
+
+    $stmt = $conn->prepare("SELECT func FROM marcacoes WHERE data = ? AND hora >= ? AND hora < ?");
+    $stmt->bind_param("sss", $data, $startTime, $endTime);
+
+    if (!$stmt->execute()) {
+        $msg = "Erro na base dados ao confirmar funcionarios disponiveis";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    $res = $stmt->get_result();
+
+    if (!$res) {
+        $msg = "Não foi possivel obter os funcionarios disponiveis, tente novamente mais tarde";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    $occupiedWorkers = array();
+    while ($row = $res->fetch_assoc()) {
+        $occupiedWorkers[] = $row["func"];
+    }
+
+    $availableWorkers = array_values(array_filter(array_diff($possibleWorkers, $occupiedWorkers)));
+
+    if (count($availableWorkers) == 0) {
+        $msg = "Não existem funcionarios para essa data e hora, tente outra";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    $choosenWorkerId = $availableWorkers[array_rand($availableWorkers)];
+    // #################
+
+    // #################
+    // Get last appointment ID
+    $query = $conn->query("SELECT max(idMarcacao) as 'maxId' FROM `marcacoes`");
+
+    if (!$query) {
+        $msg = "Erro interno";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    $res = $query->fetch_assoc();
+
+
+    $newAppointmentId = ($res == null) ? 1 : $res["maxId"] + 1;
+
+    // #################
+
+
+    $stmt = $conn->prepare("INSERT INTO `marcacoes` (`idMarcacao`, `data`, `hora`, `idAnimal` , `idUser`, `tratamento`, `func`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("issiisi", $newAppointmentId, $data, $hora, $animalId, $clientId, $tratamento, $choosenWorkerId);
+
+    if (!$stmt->execute()) {
+        $msg = "Houve um erro com a base de dados ao criar a nova marcação";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
+    if ($stmt->affected_rows == 1) {
+        header("Location: $redirectPage"."success");
+        die();
+    }
+
+    $msg = "Não foi possivel criar, tente novamente mais tarde";
+    header("Location: $redirectPage"."db_error&msg=$msg");
 ?>
