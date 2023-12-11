@@ -51,9 +51,7 @@
 
     // Client has no access to other chekups that aren't his
     $isClientOwnCheckup = auth_isClient() && $pageData["idUser"] == $_SESSION["userId"];
-    if (!$isClientOwnCheckup && !auth_isAdmin() && !auth_isWorker()
-        || (false)
-    ) {
+    if (!$isClientOwnCheckup && !auth_isAdmin() && !auth_isWorker()) {
         header("Location: PgUtilizador.php");
         die();
     }
@@ -73,10 +71,30 @@
 <body>
     <?php
         include_once("navbar.php");
+
+        if (isset($_GET["db_error"])) {
+            echo "
+                <div class='form-warning error'>
+                    ". $_GET["msg"] ."
+                </div>
+            ";
+        } else if (isset($_GET["success"])) {
+            echo "
+                <div class='form-warning success'>
+                    Marcação editada com sucesso
+                </div>
+            ";
+        } else if (count($_GET) > 1) {
+            echo "
+                <div class='form-warning error'>
+                    Dados de registo inválidos
+                </div>
+            ";
+        }
     ?>
     <div class="edit-content-container">
         <h2>Editar Marcação</h2>
-        <form action="editarMarcacao.php" method="GET">
+        <form action="editarMarcacao.php" method="POST">
             <?php
                 if (auth_isAdmin() || auth_isWorker()) {
                     echo "
@@ -99,7 +117,7 @@
             <div class="input-box">
                 <label>
                     Hora
-                    <select>
+                    <select name="hora">
                         <?php
                             $horarios = array("09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "14:00",
                             "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30");
@@ -119,7 +137,7 @@
                 <label>
                     <!-- Ana and Clara originally didn't allow treatment change -->
                     Tipo de tratamento
-                    <input type="text" style="text-transform: capitalize" value="<?php echo $pageData['tratamento'] ?>" disabled readonly>
+                    <input type="text" style="text-transform: capitalize" name="tratamento" value="<?php echo $pageData['tratamento'] ?>" disabled readonly>
                 </label>
             </div>
             <div class="input-box">
@@ -129,7 +147,7 @@
                     <input type="text" value="<?php echo $pageData['nomeAnimal'] ?>" disabled readonly>
                 </label>
             </div>
-            <input type="hidden" name="idMarcacao" value="<?php echo $marcacaoId ?>">
+            <input type="hidden" name="idMarcacao" value="<?php echo $marcacaoId ?>"/>
             <button class="form-btn" type="submit">
                 Guardar alterações
             </button>
