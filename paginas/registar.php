@@ -1,7 +1,7 @@
 <?php
     include_once("auth.php");
 
-    if (isset($auth_userType) && $auth_userType == CLIENTE) {
+    if (auth_isLogged() && auth_isClient()) {
         header("Location: PgUtilizador.php");
         die();
     }
