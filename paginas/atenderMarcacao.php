@@ -1,55 +1,61 @@
 <?php
-session_start();
+    include_once("auth.php");
 
-include('../basedados/basedados.h');
-include "tiposUtilizadores.php";
+    redirectToIfNotLogged();
 
-if (isset($_SESSION["utilizador"])) {
-
-    //variaveis do formulario
-    $idMarcacao = $_GET["idMarcacao"];
-
-    //variavel de sessao
-    $idUser = $_SESSION["id"];
-    $tipoUtilizador = $_SESSION["tipo"];
-
-    if ($tipoUtilizador != FUNC) {
-        echo "Não pode atender marcações.";
-        header("Refresh:1; url=PgUtilizador.php");
-    } else {
-        //verificar se é o utlizador correto - funcionario que pode atender
-        $query = "SELECT func, data FROM marcacoes WHERE idMarcacao = '" . $idMarcacao . "'";
-        $ret = mysqli_query($conn, $query);
-
-        if (!$ret) {
-            die('Could not get data: ' . mysqli_error($conn)); // se não funcionar dá erro
-        }
-
-        $row_marcacao = mysqli_fetch_array($ret);
-
-        if ($idUser != $row_marcacao["func"]) {
-            echo "Não pode atender esta marcação!";
-            header("Refresh:1; url=PgUtilizador.php");
-        } else {
-            if ($row_marcacao["data"] <= date('Y-m-d')) {
-                $update = "Update `marcacoes` SET `estado` = 1
-                    WHERE `func` = '" . $idUser . "' and `idMarcacao` = '" . $idMarcacao . "' ";
-
-                $res = mysqli_query($conn, $update);
-                if (!$res) {
-                    die('Could not get data: ' . mysqli_error($conn)); // se não funcionar dá erro
-                } else {
-                    echo "Marcação atendida com sucesso!";
-                    header("Refresh:1; url=PgUtilizador.php");
-                }
-            } else {
-                echo "Não é possível atender marcações futuras.";
-                header("Refresh:1; url=PgUtilizador.php");
-            }
-        }
+    if (!isset($_GET["idMarcacao"])) {
+        header("Location: PgUtilizador.php");
+        die();
     }
-} else {
-    echo "Efetue login!";
-    header("Refresh:1; url=logout.php");
-}
+
+    if (!auth_isWorker()) {
+        header("Refresh: 2; url=PgUtilizador.php");
+        die("O seu tipo de utilizador não permite atender marcações");
+    }
+
+    $appointmentId = $_GET["idMarcacao"];
+
+    /* @var $conn mysqli */
+    $stmt = $conn->prepare("SELECT func, data, hora FROM marcacoes WHERE idMarcacao = ?");
+    $stmt->bind_param("i", $appointmentId);
+
+    if (!$stmt->execute()) {
+        header("Refresh: 2; url=PgUtilizador.php");
+        die("Ocorreu um problema com a base de dados");
+    }
+
+    $res = $stmt->get_result();
+
+    if (!$res) {
+        header("Refresh: 2; url=PgUtilizador.php");
+        die("Não foi possivel obter os dados de marcação");
+    }
+
+    $resAssoc = $res->fetch_assoc();
+
+    if ($_SESSION["userId"] != $resAssoc["func"]) {
+        header("Refresh: 2; url=PgUtilizador.php");
+        die("Você não é o funcionário desta marcação! Não a pode atender!");
+    }
+
+    if (strtotime($resAssoc["data"] ." ". $resAssoc["hora"]) > time()) {
+        header("Refresh: 2; url=PgUtilizador.php");
+        die("Não pode atender marcações futuras!");
+    }
+
+    $stmt = $conn->prepare("UPDATE `marcacoes` SET `estado` = 1 WHERE `idMarcacao` = ?");
+    $stmt->bind_param("i", $appointmentId);
+
+    if (!$stmt->execute()) {
+        header("Refresh: 2; url=PgUtilizador.php");
+        die("Ocorreu um problema ao atender marcação");
+    }
+
+    if ($stmt->affected_rows == 1) {
+        echo "Marcação atendida com sucesso";
+    } else {
+        echo "Não foi possivel atender marcação, tente mais tardes";
+    }
+
+    header("Refresh: 2; url=PgUtilizador.php");
 ?>

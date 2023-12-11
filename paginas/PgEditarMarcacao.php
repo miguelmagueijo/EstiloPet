@@ -38,9 +38,9 @@
     $nowTime = strtotime(date("H:m"));
     $todayDate = strtotime(date("Y-m-d"));
 
-    if ($todayDate >= strtotime($pageData["data"])) {
-        header("Refresh: 5; url=PgUtilizador.php");
-        die("Não pode atualizar marcações antigas ou do próprio dia.");
+    if (auth_isClient() && $todayDate >= strtotime($pageData["data"]) || $todayDate > strtotime($pageData["data"])) {
+        header("Refresh: 3; url=PgUtilizador.php");
+        die("Não pode atualizar marcações antigas ou do próprio dia se for cliente.");
     }
 
     $minPossibleDate = $pageData["data"];
@@ -51,9 +51,7 @@
 
     // Client has no access to other chekups that aren't his
     $isClientOwnCheckup = auth_isClient() && $pageData["idUser"] == $_SESSION["userId"];
-    if (!$isClientOwnCheckup && !auth_isAdmin() && !auth_isWorker()
-        || (false)
-    ) {
+    if (!$isClientOwnCheckup && !auth_isAdmin() && !auth_isWorker()) {
         header("Location: PgUtilizador.php");
         die();
     }
@@ -73,10 +71,30 @@
 <body>
     <?php
         include_once("navbar.php");
+
+        if (isset($_GET["db_error"])) {
+            echo "
+                <div class='form-warning error'>
+                    ". $_GET["msg"] ."
+                </div>
+            ";
+        } else if (isset($_GET["success"])) {
+            echo "
+                <div class='form-warning success'>
+                    Marcação editada com sucesso
+                </div>
+            ";
+        } else if (count($_GET) > 1) {
+            echo "
+                <div class='form-warning error'>
+                    Dados de registo inválidos
+                </div>
+            ";
+        }
     ?>
     <div class="edit-content-container">
         <h2>Editar Marcação</h2>
-        <form action="editarMarcacao.php" method="GET">
+        <form action="editarMarcacao.php" method="POST">
             <?php
                 if (auth_isAdmin() || auth_isWorker()) {
                     echo "
@@ -90,23 +108,21 @@
                 }
 
             ?>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_time']) ? 'invalid' : '' ?>">
                 <label>
                     Data
                     <input type="date" name="data" min="<?php echo $minPossibleDate ?>" value="<?php echo $pageData['data'] ?>" required/>
                 </label>
             </div>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_time']) ? 'invalid' : '' ?>">
                 <label>
                     Hora
-                    <select>
+                    <select name="hora">
                         <?php
-                            $horarios = array("09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "14:00",
-                            "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30");
+                            $horarios = array("09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+                                "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30");
 
                             $pageData["hora"] = substr($pageData["hora"], 0, 5);
-
-
 
                             foreach ($horarios as $hora) {
                                 echo "<option value='$hora' ". ($pageData["hora"] == $hora ? 'selected' : null) .">$hora</option>";
@@ -119,7 +135,7 @@
                 <label>
                     <!-- Ana and Clara originally didn't allow treatment change -->
                     Tipo de tratamento
-                    <input type="text" style="text-transform: capitalize" value="<?php echo $pageData['tratamento'] ?>" disabled readonly>
+                    <input type="text" style="text-transform: capitalize" name="tratamento" value="<?php echo $pageData['tratamento'] ?>" disabled readonly>
                 </label>
             </div>
             <div class="input-box">
@@ -129,7 +145,7 @@
                     <input type="text" value="<?php echo $pageData['nomeAnimal'] ?>" disabled readonly>
                 </label>
             </div>
-            <input type="hidden" name="idMarcacao" value="<?php echo $marcacaoId ?>">
+            <input type="hidden" name="idMarcacao" value="<?php echo $marcacaoId ?>"/>
             <button class="form-btn" type="submit">
                 Guardar alterações
             </button>

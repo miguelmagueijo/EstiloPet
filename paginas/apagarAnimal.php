@@ -1,50 +1,50 @@
-<html>
-
-<head>
-    <meta charset="UTF-8">
-</head>
-
-</html>
 <?php
-session_start();
-if (isset($_SESSION["utilizador"])) {
+    include_once("auth.php");
 
-    include('../basedados/basedados.h');
+    redirectToIfNotLogged();
 
-    //variavel do formulario
-    $idAnimal=$_GET["idAnimal"];
-
-    //variavel de sessao
-    $idUser = $_SESSION["id"];
-
-    //verificar se é o utlizador correto
-    $query = "SELECT idUser FROM animal WHERE idAnimal = '" . $idAnimal . "'";
-    $ret = mysqli_query($conn, $query);
-
-    if (!$ret) {
-        die('Could not get data: ' . mysqli_error($conn)); // se não funcionar dá erro
+    if (!isset($_GET["idAnimal"])) {
+        header("Location: PgUtilizador.php");
+        die();
     }
 
-    $row_animal = mysqli_fetch_array($ret);
+    $animalId = $_GET["idAnimal"];
 
-    if ($idUser != $row_animal["idUser"]) {
-        echo "Utilizador inválido!";
-        header("Refresh:1; url=logout.php");
+    /* @var $conn mysqli */
+    $stmt = $conn->prepare("SELECT idUser FROM animal WHERE idAnimal = ?");
+    $stmt->bind_param("i", $animalId);
+
+    if (!$stmt->execute()) {
+        header("Refresh:2; url=PgUtilizador.php");
+        die("Houve problemas com a base de dados");
+    }
+
+    $res = $stmt->get_result();
+    if(!$res || $res->num_rows == 0) {
+        header("Refresh:2; url=PgUtilizador.php");
+        die("Animal (id: $animalId) não encontrado");
+    }
+
+    $userId = $res->fetch_assoc()["idUser"];
+
+    if ($userId != $_SESSION["userId"]) {
+        header("Refresh:2; url=PgUtilizador.php");
+        die("Só o dono do animal pode apagar o seu animal");
+    }
+
+    $stmt = $conn->prepare("DELETE FROM animal WHERE idAnimal = ?");
+    $stmt->bind_param("i", $animalId);
+
+    if (!$stmt->execute()) {
+        header("Refresh:2; url=PgUtilizador.php");
+        die("Houve problemas com a base de dados ao apagar o animal");
+    }
+
+    if ($stmt->affected_rows == 1) {
+        echo "Animal eliminado com sucesso!";
     } else {
-
-        $delete="DELETE FROM animal WHERE idAnimal= '$idAnimal'";
-        $res = mysqli_query($conn, $delete);
-
-        if (mysqli_affected_rows ($conn) == 1) {
-            echo "Eliminado com sucesso!";
-            header("Refresh:1; url=PgUtilizador.php");
-        } else {
-            echo "Algo falhou...";
-            header("Refresh:1; url=PgUtilizador.php");
-        }
+        echo "Não foi possivel eliminar o animal pretendido, tente novamente mais tarde.";
     }
-} else {
-    echo "Efetue login!";
-    header("Refresh:1; url=logout.php");
-}
+
+    header("Refresh:2; url=PgUtilizador.php");
 ?>

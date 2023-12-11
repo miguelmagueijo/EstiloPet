@@ -1,51 +1,57 @@
 <?php
-session_start();
-if (isset($_SESSION["utilizador"])) {
+    include_once("auth.php");
 
-    include('../basedados/basedados.h');
-    include "tiposUtilizadores.php";
+    redirectToIfNotLogged();
 
-    //variavel do formulario
-    $idMarcacao=$_GET["idMarcacao"];
-
-    //variavel de sessao
-    $idUser = $_SESSION["id"];
-    $tipoUtilizador = $_SESSION["tipo"];
-
-    //verificar se é o utlizador correto
-    $query = "SELECT idUser, func FROM marcacoes WHERE idMarcacao = '" . $idMarcacao . "'";
-    $ret = mysqli_query($conn, $query);
-
-    if (!$ret) {
-        die('Could not get data: ' . mysqli_error($conn)); // se não funcionar dá erro
+    if (!isset($_GET["idMarcacao"])) {
+        header("Location: PgUtilizador.php");
+        die();
     }
 
-    $row_marcacao = mysqli_fetch_array($ret);
+    $appointmentId = $_GET["idMarcacao"];
 
-    $func = $row_marcacao["func"];
-   
-    if($tipoUtilizador == FUNC && $func != $idUser) {
-        echo "Não é possível eliminar esta marcação.";
+    /* @var $conn mysqli */
+    $stmt = $conn->prepare("SELECT idUser, func, data, hora FROM marcacoes WHERE idMarcacao = ?");
+    $stmt->bind_param("i", $appointmentId);
+
+    if (!$stmt->execute()) {
         header("Refresh:2; url=PgUtilizador.php");
-    } else {
-        if ($idUser == $row_marcacao["idUser"] || $tipoUtilizador == ADMIN || $tipoUtilizador == FUNC) {
-            $delete="DELETE FROM marcacoes WHERE idMarcacao= '$idMarcacao'";
-            $res = mysqli_query($conn, $delete);
-    
-            if (mysqli_affected_rows ($conn) == 1) {
-                echo "Eliminado com sucesso!";
-                header("Refresh:1; url=PgUtilizador.php");
-            } else {
-                echo "Algo falhou...";
-                header("Refresh:1; url=PgUtilizador.php");
-            }
-        } else {
-            echo "Utilizador inválido!";
-            header("Refresh:1; url=logout.php"); 
-        }
+        die("Houve problemas com a base de dados");
     }
-} else {
-    echo "Efetue login!";
-    header("Refresh:1; url=logout.php");
-}
+
+    $res = $stmt->get_result();
+
+    if(!$res || $res->num_rows == 0) {
+        header("Refresh:2; url=PgUtilizador.php");
+        die("Não existe nenhuma marcação com id $appointmentId");
+    }
+
+    $resAssoc = $res->fetch_assoc();
+
+    if ((auth_isWorker() && $resAssoc["func"] == $_SESSION["userId"]) ||
+        auth_isAdmin() || (auth_isClient() && $resAssoc["idUser"] == $_SESSION["userId"])) {
+
+        if (!auth_isAdmin() && strtotime($resAssoc["data"] ." ". $resAssoc["hora"]) <= time()) {
+            header("Refresh:2; url=PgUtilizador.php");
+            die("Apenas o ADMIN pode apagar marcações antigas, contacte um administrador para apagar.");
+        }
+
+        $stmt = $conn->prepare("DELETE FROM marcacoes WHERE idMarcacao = ?");
+        $stmt->bind_param("i", $appointmentId);
+
+        if (!$stmt->execute()) {
+            header("Refresh:2; url=PgUtilizador.php");
+            die("Houve problemas com a base de dados ao apagar marcação");
+        }
+
+        if ($stmt->affected_rows == 1) {
+            echo "Marcação apagada com sucesso";
+        } else {
+            echo "Ocorreu um erro ao apagar a marcação, tente novamente mais tarde";
+        }
+    } else {
+        echo "Não tem permissões para esta operação";
+    }
+
+    header("Refresh:2; url=PgUtilizador.php");
 ?>

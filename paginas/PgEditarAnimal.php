@@ -41,17 +41,37 @@
 <body>
     <?php
         include_once("navbar.php");
+
+        if (isset($_GET["db_error"])) {
+            echo "
+                <div class='form-warning error'>
+                    ". $_GET["msg"] ."
+                </div>
+            ";
+        } else if (isset($_GET["success"])) {
+            echo "
+                <div class='form-warning success'>
+                    Animal editado com sucesso
+                </div>
+            ";
+        } else if (count($_GET) > 1) {
+            echo "
+                <div class='form-warning error'>
+                    Dados de registo inválidos
+                </div>
+            ";
+        }
     ?>
     <div class="edit-content-container">
         <h2>Editar Animal</h2>
-        <form action="editarAnimal.php" method="GET">
-            <div class="input-box">
+        <form action="editarAnimal.php" method="POST">
+            <div class="input-box <?php echo isset($_GET['inv_nome']) ? 'invalid' : '' ?>">
                 <label>
                     Nome
-                    <input type="text" value="<?php echo $animalData['nomeAnimal'] ?>" minlength="2" required/>
+                    <input type="text" name="nome-animal" value="<?php echo $animalData['nomeAnimal'] ?>" minlength="3" required/>
                 </label>
             </div>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_tipo']) ? 'invalid' : '' ?>">
                 <label>
                     Tipo de Animal
                 </label>
@@ -64,13 +84,13 @@
                     </div>
                 </div>
             </div>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_porte']) ? 'invalid' : '' ?>">
                 <label>
                     Porte
                     <select id="porte-animal" name="porte-animal">';
-                        <option value="grande" selected>Grande</option>
-                        <option value="medio">Médio</option>
-                        <option value="pequeno">Pequeno</option>';
+                        <option value="grande" <?php echo $animalData["porte"] == "grande" ? "selected" : null ?>>Grande</option>
+                        <option value="medio" <?php echo $animalData["porte"] == "medio" ? "selected" : null ?>>Médio</option>
+                        <option value="pequeno" <?php echo $animalData["porte"] == "pequeno" ? "selected" : null ?>>Pequeno</option>';
                     </select>
                 </label>
             </div>
