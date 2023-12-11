@@ -1,45 +1,48 @@
-
-<html>
-
-<head>
-    <meta charset="UTF-8">
-</head>
-
-</html>
 <?php
-session_start();
+    include_once("auth.php");
 
-include('../basedados/basedados.h');
-include "tiposUtilizadores.php";
+    redirectToIfNotAdmin();
 
-if (isset($_SESSION["utilizador"])) {
-
-    //variaveis do formulario
-    $idCliente = $_GET["idUser"];
-
-    //variavel de sessao
-    $idUser = $_SESSION["id"];
-    $tipoUtilizador = $_SESSION["tipo"];
-
-    if ($tipoUtilizador == ADMIN) {
-        $update = "Update `user` SET `tipoUtilizador` = 2
-                    WHERE `idUser` = '" . $idCliente . "'";
-
-        $res = mysqli_query($conn, $update);
-
-        if (!$res) {
-            die('Could not get data: ' . mysqli_error($conn)); // se não funcionar dá erro
-        } else {
-            echo "Validado com sucesso!";
-            header("Refresh:1; url=PgUtilizador.php");
-        }
-
-    } else {
-        echo "Não pode validar clientes";
-        header("Refresh:1; url=PgUtilizador.php");
+    if (!isset($_GET["idUser"])) {
+        header("Location: PgUtilizador.php");
+        die();
     }
-} else {
-    echo "Efetue login!";
-    header("Refresh:1; url=logout.php");
-}
+
+    $userId = $_GET["idUser"];
+
+    /* @var $conn mysqli */
+    $stmt = $conn->prepare("SELECT `tipoUtilizador` from `user` WHERE idUser = ?");
+    $stmt->bind_param("i", $userId);
+
+    if (!$stmt->execute()) {
+        header("Refresh: 3; url=PgUtilizador.php");
+        die("Erro com a base de dados");
+    }
+
+    $res = $stmt->get_result();
+    if (!$res || $res->num_rows != 1) {
+        header("Refresh: 1; url=PgUtilizador.php");
+        die("Utilizador não existente");
+    }
+
+    if ($res->fetch_assoc()["tipoUtilizador"] != CLIENTE_POR_VALIDAR) {
+        header("Refresh: 1; url=PgUtilizador.php");
+        die("Só pode validar utilizadores ainda não validados!");
+    }
+
+    $stmt = $conn->prepare("UPDATE `user` SET `tipoUtilizador` = 2 WHERE `idUser` = ?");
+    $stmt->bind_param("i", $userId);
+
+    if (!$stmt->execute()) {
+        header("Refresh: 3; url=PgUtilizador.php");
+        die("Erro com a base de dados");
+    }
+
+    if ($stmt->affected_rows == 1) {
+        echo "Validado com sucesso!";
+    } else {
+        echo "Não foi possivel validar o utilizador, tente novamente mais tarde";
+    }
+
+    header("Refresh:2; url=PgUtilizador.php");
 ?>
