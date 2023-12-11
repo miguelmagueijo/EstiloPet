@@ -38,9 +38,9 @@
     $nowTime = strtotime(date("H:m"));
     $todayDate = strtotime(date("Y-m-d"));
 
-    if ($todayDate >= strtotime($pageData["data"])) {
+    if (auth_isClient() && $todayDate >= strtotime($pageData["data"]) || $todayDate > strtotime($pageData["data"])) {
         header("Refresh: 3; url=PgUtilizador.php");
-        die("Não pode atualizar marcações antigas ou do próprio dia.");
+        die("Não pode atualizar marcações antigas ou do próprio dia se for cliente.");
     }
 
     $minPossibleDate = $pageData["data"];
