@@ -45,24 +45,44 @@
 
 <body>
     <?php
-        include_once("navbar.php");
+    include_once("navbar.php");
+
+    if (isset($_GET["db_error"])) {
+        echo "
+                <div class='form-warning error'>
+                    ". $_GET["msg"] ."
+                </div>
+            ";
+    } else if (isset($_GET["success"])) {
+        echo "
+                <div class='form-warning success'>
+                    Animal criado com sucesso
+                </div>
+            ";
+    } else if (count($_GET) > 1) {
+        echo "
+                <div class='form-warning error'>
+                    Dados de registo inválidos
+                </div>
+            ";
+    }
     ?>
     <div class="edit-content-container">
         <h2>Registar Animal</h2>
-        <form action="registarAnimal.php" method="GET">
+        <form action="registarAnimal.php" method="POST">
             <div class="input-box">
                 <label>
                     Nome do cliente
                     <input type="text" name="useless" value="<?php echo $clientData['nomeUser'] ?>" disabled readonly>
                 </label>
             </div>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_nome']) ? 'invalid' : '' ?>">
                 <label>
                     Nome do Animal
-                    <input type="text" name="nome-animal" minlength="2" required>
+                    <input type="text" name="nome-animal" minlength="3" required>
                 </label>
             </div>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_tipo']) ? 'invalid' : '' ?>">
                 <label>
                     Tipo de Animal
                 </label>
@@ -75,7 +95,7 @@
                     </div>
                 </div>
             </div>
-            <div class="input-box">
+            <div class="input-box <?php echo isset($_GET['inv_porte']) ? 'invalid' : '' ?>">
                 <label>
                     Porte
                     <select name="porte-animal">
@@ -90,6 +110,34 @@
                 Registar animal
             </button>
         </form>
+    </div>
+    <div style="margin-top: 2rem" id="table-pesos">
+        <table>
+            <thead style="background-color: #fdba74">
+            <tr>
+                <th>Porte</th>
+                <th>Peso do Cão</th>
+                <th>Peso do Gato</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Pequeno</td>
+                <td>Até 10kg</td>
+                <td>Até 4kg</td>
+            </tr>
+            <tr>
+                <td>Médio</td>
+                <td>10kg - 25kg</td>
+                <td>4kg - 6kg</td>
+            </tr>
+            <tr>
+                <td>Grande</td>
+                <td>Acima de 25kg</td>
+                <td>Acima de 6kg</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <div style="text-align: center; margin-top: 2rem;">
         <a class="go-back-btn" href="PgUtilizador.php">
