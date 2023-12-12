@@ -492,15 +492,35 @@
                     ";
             }
 
+            /* @var $conn mysqli */
+            $query_tabelas = $conn->query("SHOW TABLES");
+            $arr_tabelas = array();
+            while($r = $query_tabelas->fetch_row()) {
+                $arr_tabelas[] = $r[0];
+            }
+
             if ($row["tipoUtilizador"] == ADMIN) {
                 echo "
                             <div class='menu-content-option'>
                                 <h3>Base de dados</h3>
-                                <div>
-                                    <a class='menu-action-button' href='PgExportDatabase.php'>Exportar para XML</a>
-                                    <a class='menu-action-button' href='PgExportDatabaseDTD.php'>Exportar para DTD</a>
-                                    <a class='menu-action-button' href='PgExportDatabaseXSD.php'>Exportar para XML Schema</a>
-                                </div>
+                                <form method='POST'>
+                                    <button class='menu-action-button' formaction='PgExportDatabase.php'>Exportar para XML</button>
+                                    <button class='menu-action-button' formaction='PgExportDatabaseDTD.php'>Exportar para DTD</button>
+                                    <button class='menu-action-button' formaction='PgExportDatabaseXSD.php'>Exportar para XML Schema</button>
+                                    <h4 style='margin: 5px 0 0 0 '>Tabelas a exportar</h4>
+                                    <label>
+                                        Todas <input type='checkbox' value='all' id='all_tables' name='all_tables' checked />
+                                    </label>
+                ";
+                foreach ($arr_tabelas as $tb) {
+                    echo "
+                        <label style='text-transform: capitalize; margin-left: 1rem;'>
+                            $tb<input type='checkbox' value='$tb' name='table_name[]' checked />
+                        </label>
+                    ";
+                }
+                echo    "
+                                </form>
                             </div>
                 ";
             }
@@ -515,11 +535,32 @@
     <?php include_once("footer.html") ?>
     <!-- TODO: remove accordion, adopt menu-box -->
     <script>
-        const menuChoices = document.getElementsByClassName("menu-box");
-        for (const mc of menuChoices) {
-            mc.addEventListener("click", (evt) => {
-                evt.currentTarget.classList.toggle("hidden");
-            })
+        window.onload = () => {
+            const menuChoices = document.getElementsByClassName("menu-title-container");
+            for (const mc of menuChoices) {
+                mc.addEventListener("click", (evt) => {
+                    evt.currentTarget.parentElement.classList.toggle("hidden");
+                })
+            }
+
+            const allTablesCb = document.getElementById("all_tables");
+            const tablesCb = Array.from(document.getElementsByName("table_name[]"));
+
+            allTablesCb.addEventListener("click", () => {
+                for (const tCb of tablesCb) {
+                    tCb.checked = allTablesCb.checked;
+                }
+            });
+
+            for (const tCb of tablesCb) {
+                tCb.addEventListener("click", () => {
+                    if (tCb.checked === false) {
+                        allTablesCb.checked = false;
+                    }
+
+                    allTablesCb.checked = !tablesCb.some((cb) => cb.checked === false);
+                });
+            }
         }
     </script>
 

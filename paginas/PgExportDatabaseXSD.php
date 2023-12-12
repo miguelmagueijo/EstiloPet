@@ -6,6 +6,8 @@
         return;
     }
 
+    $filename = "database_export_schema.xsd";
+
     /* @var $domDoc DOMDocument */
     function sqlColumnToXmlSchema(&$domDoc, $colName, $typeName, $isNull, $defaultValue = null) {
         $element = $domDoc->createElement("xs:element");
@@ -39,6 +41,77 @@
 
         return $element;
     }
+
+
+    $tableNames = array();
+    /* @var $conn mysqli */
+    if (isset($_POST["all_tables"]) || !isset($_POST["table_name"]) || !is_array($_POST["table_name"])) {
+        $res = $conn->query("SHOW TABLES");
+
+        if (!$res) {
+            die("SQL Error #1");
+        }
+
+        while($row = $res->fetch_row()) {
+            $tableNames[] = $row[0];
+        }
+    } else {
+        $tableNames = $_POST["table_name"];
+    }
+
+    $xsdDoc = new DOMDocument("1.0", "UTF-8");
+    $xsdDoc->formatOutput = true;
+    $xsdRoot = $xsdDoc->createElement("xs:schema"); // TODO: use variable from basededados.h
+    $xsdRoot->setAttribute("xmlns:xs", "http://www.w3.org/2001/XMLSchema");
+
+    $dbElement = $xsdDoc->createElement("xs:element");
+    $dbElement->setAttribute("name", "lod_mm_ma");
+
+    $dbElementComplexType = $xsdDoc->createElement("xs:complexType");
+    $dbElementSequence = $xsdDoc->createElement("xs:sequence");
+
+    $exportDateElement = $xsdDoc->createElement("xs:element");
+    $exportDateElement->setAttribute("name", "export_date");
+    $exportDateElement->setAttribute("type", "xs:dateTime");
+
+    //$exportDateElement->setAttribute("timezone", $currentDate->getTimezone()->getName());
+
+    foreach ($tableNames as $tableName) {
+        $resTableColumns = $conn->query("SHOW COLUMNS FROM $tableName");
+        if(!$resTableColumns) {
+            die("SQL error #2");
+        }
+
+        $tableOuterElement = $xsdDoc->createElement("xs:element");
+        $tableOuterElement->setAttribute("name", "tabela_$tableName");
+        $tableOuterElementComplexType = $xsdDoc->createElement("xs:complexType");
+        $tableOuterElementSequence = $xsdDoc->createElement("xs:sequence");
+
+
+        $tableElement = $xsdDoc->createElement("xs:element");
+        $tableElement->setAttribute("name", $tableName);
+        $tableElement->setAttribute("minOccurs", "0");
+        $tableElement->setAttribute("maxOccurs", "unbounded");
+        $tableElementComplexType = $xsdDoc->createElement("xs:complexType");
+        $tableElementSequence = $xsdDoc->createElement("xs:sequence");
+
+        while($cRow = $resTableColumns->fetch_assoc()) {
+            $tableElementSequence->appendChild(sqlColumnToXmlSchema($xsdDoc, $cRow["Field"], $cRow["Type"], $cRow["Null"], $cRow["Default"]));
+        }
+
+        $tableElementComplexType->appendChild($tableElementSequence);
+        $tableElement->appendChild($tableElementComplexType);
+        $tableOuterElementSequence->appendChild($tableElement);
+        $tableOuterElementComplexType->appendChild($tableOuterElementSequence);
+        $tableOuterElement->appendChild($tableOuterElementComplexType);
+        $dbElementSequence->appendChild($tableOuterElement);
+    }
+
+    $dbElementComplexType->appendChild($dbElementSequence);
+    $dbElement->appendChild($dbElementComplexType);
+    $xsdRoot->appendChild($dbElement);
+    $xsdDoc->appendChild($xsdRoot);
+    $xsdDoc->save($filename);
 ?>
 
 <!DOCTYPE html>
@@ -58,33 +131,6 @@
                 width: 80%;
                 margin: 0 auto;
             }
-
-            pre {
-                font-size: 16px;
-                margin: 0 0 5rem 0;
-                border: 2px solid black;
-                border-radius: 5px;
-                padding: 1rem 1rem;
-            }
-
-            .voltar-btn {
-                display: inline-block;
-                padding: 0.5rem 1rem;
-                border: 2px solid black;
-                border-radius: 5px;
-                text-decoration: none;
-                color: white;
-                font-weight: bolder;
-                font-family: Calibri, sans-serif;
-                font-size: 1.2rem;
-                margin-bottom: 1rem;
-                background: cornflowerblue;
-                transition-duration: 300ms;
-            }
-
-            .voltar-btn:hover {
-                background: #3662bb;
-            }
         </style>
     </head>
 
@@ -96,9 +142,13 @@
         </h1>
 
         <main class="main-container">
-            <div>
-                <h2 style="margin-bottom: 1rem;">Código</h2>
-                <a class="voltar-btn" href="PgUtilizador.php">Voltar</a>
+            <div style="display: flex; align-items: center; gap: 1rem; justify-content: space-between;">
+                <h2>Código XSD</h2>
+                <?php
+                    if (file_exists($filename)) {
+                        echo "<a class='download-btn' href=$filename download>Download</a>";
+                    }
+                ?>
             </div>
             <?php
                 $currentDate = null;
@@ -110,79 +160,18 @@
 
                 echo "<div>Export created on ".$currentDate->format("Y-m-d H:i:s")."</div>";
             ?>
-            <!-- TODO: use https://highlightjs.org/ -->
-            <pre id="xml-schema-code">
+            <pre>
                 <?php
-                    /* @var $conn mysqli */
-                    $res = $conn->query("SHOW TABLES");
-
-                    if (!$res) {
-                        die("SQL Error #1");
-                    }
-
-                    $xsdDoc = new DOMDocument("1.0", "UTF-8");
-                    $xsdDoc->formatOutput = true;
-                    $xsdRoot = $xsdDoc->createElement("xs:schema"); // TODO: use variable from basededados.h
-                    $xsdRoot->setAttribute("xmlns:xs", "http://www.w3.org/2001/XMLSchema");
-
-                    $dbElement = $xsdDoc->createElement("xs:element");
-                    $dbElement->setAttribute("name", "lod_mm_ma");
-
-                    $dbElementComplexType = $xsdDoc->createElement("xs:complexType");
-                    $dbElementSequence = $xsdDoc->createElement("xs:sequence");
-
-                    $exportDateElement = $xsdDoc->createElement("xs:element");
-                    $exportDateElement->setAttribute("name", "export_date");
-                    $exportDateElement->setAttribute("type", "xs:dateTime");
-
-                    //$exportDateElement->setAttribute("timezone", $currentDate->getTimezone()->getName());
-
-                    while($rowTables = $res->fetch_row()) {
-                        $tableName = $rowTables[0];
-
-                        $resTableColumns = $conn->query("SHOW COLUMNS FROM $tableName");
-                        if(!$resTableColumns) {
-                            die("SQL error #2");
-                        }
-
-                        $tableOuterElement = $xsdDoc->createElement("xs:element");
-                        $tableOuterElement->setAttribute("name", "tabela_$tableName");
-                        $tableOuterElementComplexType = $xsdDoc->createElement("xs:complexType");
-                        $tableOuterElementSequence = $xsdDoc->createElement("xs:sequence");
-
-
-                        $tableElement = $xsdDoc->createElement("xs:element");
-                        $tableElement->setAttribute("name", $tableName);
-                        $tableElement->setAttribute("minOccurs", "0");
-                        $tableElement->setAttribute("maxOccurs", "unbounded");
-                        $tableElementComplexType = $xsdDoc->createElement("xs:complexType");
-                        $tableElementSequence = $xsdDoc->createElement("xs:sequence");
-
-                        while($cRow = $resTableColumns->fetch_assoc()) {
-                            $tableElementSequence->appendChild(sqlColumnToXmlSchema($xsdDoc, $cRow["Field"], $cRow["Type"], $cRow["Null"], $cRow["Default"]));
-                        }
-
-                        $tableElementComplexType->appendChild($tableElementSequence);
-                        $tableElement->appendChild($tableElementComplexType);
-                        $tableOuterElementSequence->appendChild($tableElement);
-                        $tableOuterElementComplexType->appendChild($tableOuterElementSequence);
-                        $tableOuterElement->appendChild($tableOuterElementComplexType);
-                        $dbElementSequence->appendChild($tableOuterElement);
-                    }
-
-                    $dbElementComplexType->appendChild($dbElementSequence);
-                    $dbElement->appendChild($dbElementComplexType);
-                    $xsdRoot->appendChild($dbElement);
-                    $xsdDoc->appendChild($xsdRoot);
                     echo htmlentities($xsdDoc->saveXML());
                 ?>
             </pre>
-            <script>
-                // Remove leading spaces of <pre> first line
-                const xmlCodeElement = document.getElementById("xml-schema-code");
-                xmlCodeElement.innerText = xmlCodeElement.innerText.trim();
-            </script>
+            <script src="removeSpacePre.js"></script>
         </main>
+        <div style="text-align: center;">
+            <a class="go-back-btn" href="PgUtilizador.php">
+                Voltar atrás
+            </a>
+        </div>
         <?php include_once("footer.html") ?>
     </body>
 </html>

@@ -1,10 +1,60 @@
 <?php
-include_once("auth.php");
+    include_once("auth.php");
 
-if (!auth_isAdmin()) {
-    header("Location: index.php");
-    return;
-}
+    if (!auth_isAdmin()) {
+        header("Location: index.php");
+        return;
+    }
+
+    $filename = "database_export_schema.dtd";
+
+    $tableNames = array();
+    /* @var $conn mysqli */
+    if (isset($_POST["all_tables"]) || !isset($_POST["table_name"]) || !is_array($_POST["table_name"])) {
+        $res = $conn->query("SHOW TABLES");
+
+        if (!$res) {
+            die("SQL Error #1");
+        }
+
+        while($row = $res->fetch_row()) {
+            $tableNames[] = $row[0];
+        }
+    } else {
+        $tableNames = $_POST["table_name"];
+    }
+
+    $dtdString = "<!DOCTYPE lod_mm_ma [\n";
+    $dtdString .= "\t<!ELEMENT lod_mm_ma (";
+
+    foreach ($tableNames as $tableName) {
+        $dtdString .= "tabela_".$tableName.", ";
+    }
+
+    $dtdString = rtrim($dtdString, ", ");
+    $dtdString .= ")>\n";
+
+    foreach($tableNames as $tName) {
+        $dtdString .= "\t\t<!ELEMENT tabela_$tName ($tName*)>\n";
+
+        $resCols = $conn->query("SHOW COLUMNS FROM $tName");
+        $columnNames = array();
+        while($row = $resCols->fetch_row()) {
+            $columnNames[] = $row[0];
+        }
+
+        $dtdString .= "\t\t\t<!ELEMENT $tName (".implode(", ", $columnNames).")>\n";
+
+        foreach($columnNames as $cName) {
+            $dtdString .= "\t\t\t\t<!ELEMENT $cName (#PCDATA)>\n";
+        }
+    }
+
+    $dtdString .= "]>";
+
+    $fp = fopen($filename, "w");
+    fwrite($fp, $dtdString);
+    fclose($fp);
 ?>
 
 <!DOCTYPE html>
@@ -16,37 +66,13 @@ if (!auth_isAdmin()) {
         <link rel="stylesheet" type="text/css" href="estilo.css" />
 
         <style>
+            * {
+                box-sizing: border-box;
+            }
 
             .main-container {
                 width: 80%;
                 margin: 0 auto;
-            }
-
-            pre {
-                font-size: 16px;
-                margin: 0 0 5rem 0;
-                border: 2px solid black;
-                border-radius: 5px;
-                padding: 1rem 1rem;
-            }
-
-            .voltar-btn {
-                display: inline-block;
-                padding: 0.5rem 1rem;
-                border: 2px solid black;
-                border-radius: 5px;
-                text-decoration: none;
-                color: white;
-                font-weight: bolder;
-                font-family: Calibri, sans-serif;
-                font-size: 1.2rem;
-                margin-bottom: 1rem;
-                background: cornflowerblue;
-                transition-duration: 300ms;
-            }
-
-            .voltar-btn:hover {
-                background: #3662bb;
             }
         </style>
     </head>
@@ -56,9 +82,13 @@ if (!auth_isAdmin()) {
             Exportação da base de dados para DTD
         </h1>
         <main class="main-container">
-            <div>
-                <h2 style="margin-bottom: 1rem;">Código</h2>
-                <a class="voltar-btn" href="PgUtilizador.php">Voltar</a>
+            <div style="display: flex; align-items: center; gap: 1rem; justify-content: space-between;">
+                <h2>Código DTD</h2>
+                <?php
+                    if (file_exists($filename)) {
+                        echo "<a class='download-btn' href=$filename download>Download</a>";
+                    }
+                ?>
             </div>
             <?php
                 $currentDate = null;
@@ -68,56 +98,20 @@ if (!auth_isAdmin()) {
                     die("Couldn't get current datetime");
                 }
 
-                echo "<div>Export created on ".$currentDate->format("Y-m-d H:i:s")."</div>"
+                echo "<div>Export generated on ".$currentDate->format("Y-m-d H:i:s")."</div>"
             ?>
-            <!-- TODO: use https://highlightjs.org/ -->
-            <pre id="dtd-code">
+            <pre>
                 <?php
-                    /* @var $conn mysqli */
-                    $res = $conn->query("SHOW TABLES");
-
-                    if (!$res) {
-                        die("SQL Error #1");
-                    }
-
-                    $dtdString = "<!DOCTYPE lod_mm_ma [\n";
-                    $dtdString .= "\t<!ELEMENT lod_mm_ma (";
-
-                    $tableNames = array();
-                    while($row = $res->fetch_row()) {
-                        $tableNames[] = $row[0];
-                        $dtdString .= "tabela_".$row[0].", ";
-                    }
-
-                    $dtdString = rtrim($dtdString, ", ");
-                    $dtdString .= ")>\n";
-
-                    foreach($tableNames as $tName) {
-                        $dtdString .= "\t\t<!ELEMENT tabela_$tName ($tName*)>\n";
-
-                        $resCols = $conn->query("SHOW COLUMNS FROM $tName");
-                        $columnNames = array();
-                        while($row = $resCols->fetch_row()) {
-                            $columnNames[] = $row[0];
-                        }
-
-                        $dtdString .= "\t\t\t<!ELEMENT $tName (".implode(", ", $columnNames).")>\n";
-
-                        foreach($columnNames as $cName) {
-                            $dtdString .= "\t\t\t\t<!ELEMENT $cName (#PCDATA)>\n";
-                        }
-                    }
-
-                    $dtdString .= "]>";
                     echo htmlentities($dtdString);
                 ?>
             </pre>
-            <script>
-                // Remove leading spaces of <pre> first line
-                const xmlCodeElement = document.getElementById("dtd-code");
-                xmlCodeElement.innerText = xmlCodeElement.innerText.trim();
-            </script>
+            <script src="removeSpacePre.js"></script>
         </main>
+        <div style="text-align: center;">
+            <a class="go-back-btn" href="PgUtilizador.php">
+                Voltar atrás
+            </a>
+        </div>
         <?php include_once("footer.html") ?>
     </body>
 </html>
