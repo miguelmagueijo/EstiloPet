@@ -544,17 +544,11 @@
             }
 
             const allTablesCb = document.getElementById("all_tables");
-            const tablesCb = document.getElementsByName("table_name[]");
-            let totalFalse = 0;
+            const tablesCb = Array.from(document.getElementsByName("table_name[]"));
 
             allTablesCb.addEventListener("click", () => {
-                totalFalse = 0;
-
                 for (const tCb of tablesCb) {
                     tCb.checked = allTablesCb.checked;
-                    if (tCb.checked === false) {
-                        totalFalse++;
-                    }
                 }
             });
 
@@ -562,14 +556,9 @@
                 tCb.addEventListener("click", () => {
                     if (tCb.checked === false) {
                         allTablesCb.checked = false;
-                        totalFalse++;
-                    } else {
-                        totalFalse--;
                     }
 
-                    if (totalFalse === 0) {
-                        allTablesCb.checked = true;
-                    }
+                    allTablesCb.checked = !tablesCb.some((cb) => cb.checked === false);
                 });
             }
         }
