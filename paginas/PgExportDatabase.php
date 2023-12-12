@@ -8,11 +8,20 @@
 
     $filename = "database_export.xml";
 
+    $tableNames = array();
     /* @var $conn mysqli */
-    $res = $conn->query("SHOW TABLES");
+    if (isset($_POST["all_tables"]) || !isset($_POST["table_name"]) || !is_array($_POST["table_name"])) {
+        $res = $conn->query("SHOW TABLES");
 
-    if (!$res) {
-        die("SQL Error #1");
+        if (!$res) {
+            die("SQL Error #1");
+        }
+
+        while($row = $res->fetch_row()) {
+            $tableNames[] = $row[0];
+        }
+    } else {
+        $tableNames = $_POST["table_name"];
     }
 
     $currentDate = null;
@@ -30,8 +39,7 @@
     $exportDateElement->setAttribute("timezone", $currentDate->getTimezone()->getName());
     $xmlRoot->appendChild($exportDateElement);
 
-    while($rowTables = $res->fetch_row()) {
-        $tableName = $rowTables[0];
+    foreach ($tableNames as $tableName) {
         $tableElement = $xmlDoc->createElement("tabela_$tableName");
 
         $resTableData = $conn->query("SELECT * FROM $tableName");

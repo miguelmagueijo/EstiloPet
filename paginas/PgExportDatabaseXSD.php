@@ -42,11 +42,21 @@
         return $element;
     }
 
-    /* @var $conn mysqli */
-    $res = $conn->query("SHOW TABLES");
 
-    if (!$res) {
-        die("SQL Error #1");
+    $tableNames = array();
+    /* @var $conn mysqli */
+    if (isset($_POST["all_tables"]) || !isset($_POST["table_name"]) || !is_array($_POST["table_name"])) {
+        $res = $conn->query("SHOW TABLES");
+
+        if (!$res) {
+            die("SQL Error #1");
+        }
+
+        while($row = $res->fetch_row()) {
+            $tableNames[] = $row[0];
+        }
+    } else {
+        $tableNames = $_POST["table_name"];
     }
 
     $xsdDoc = new DOMDocument("1.0", "UTF-8");
@@ -66,9 +76,7 @@
 
     //$exportDateElement->setAttribute("timezone", $currentDate->getTimezone()->getName());
 
-    while($rowTables = $res->fetch_row()) {
-        $tableName = $rowTables[0];
-
+    foreach ($tableNames as $tableName) {
         $resTableColumns = $conn->query("SHOW COLUMNS FROM $tableName");
         if(!$resTableColumns) {
             die("SQL error #2");

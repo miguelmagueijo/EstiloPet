@@ -8,20 +8,27 @@
 
     $filename = "database_export_schema.dtd";
 
+    $tableNames = array();
     /* @var $conn mysqli */
-    $res = $conn->query("SHOW TABLES");
+    if (isset($_POST["all_tables"]) || !isset($_POST["table_name"]) || !is_array($_POST["table_name"])) {
+        $res = $conn->query("SHOW TABLES");
 
-    if (!$res) {
-        die("SQL Error #1");
+        if (!$res) {
+            die("SQL Error #1");
+        }
+
+        while($row = $res->fetch_row()) {
+            $tableNames[] = $row[0];
+        }
+    } else {
+        $tableNames = $_POST["table_name"];
     }
 
     $dtdString = "<!DOCTYPE lod_mm_ma [\n";
     $dtdString .= "\t<!ELEMENT lod_mm_ma (";
 
-    $tableNames = array();
-    while($row = $res->fetch_row()) {
-        $tableNames[] = $row[0];
-        $dtdString .= "tabela_".$row[0].", ";
+    foreach ($tableNames as $tableName) {
+        $dtdString .= "tabela_".$tableName.", ";
     }
 
     $dtdString = rtrim($dtdString, ", ");
