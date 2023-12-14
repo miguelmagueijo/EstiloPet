@@ -5,9 +5,10 @@ h2 {
 .menu-box {
     font-family: monospace;
     width: 950px;
-    margin: auto;
-    cursor: pointer;
+    margin: 1rem auto;
     user-select: none;
+    border: 2px solid #422006;
+    border-radius: 5px;
 }
 
 .menu-title-container {
@@ -16,12 +17,14 @@ h2 {
     align-items: center;
     padding: 1.5rem 1rem;
     margin: 0;
-    background-color: #fcaf58;
-    border-bottom: 2px solid orange;
+    background-color: #fdba74;
 }
 
 .menu-title {
     display: inline-block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #422006;
 }
 
 .menu-title-arrow {
@@ -34,6 +37,7 @@ h2 {
 .menu-content {
     background-color: #ffe9d2;
     padding: 1rem;
+    border-radius: 0 0 5px 5px;
 }
 
 .menu-content-option h3 {
@@ -52,19 +56,20 @@ h2 {
 
 .menu-action-button {
     text-decoration: none;
-    color: black;
+    color: #422006;
     font-size: 1rem;
-    border: 1px solid black;
+    border: 2px solid #422006;
     border-radius: 5px;
     padding: 0.5rem 1rem;
     box-sizing: border-box;
     display: inline-block;
     background-color: white;
     transition-duration: 300ms;
+    cursor: pointer;
 }
 
 .menu-action-button:hover {
-    background-color: lightgray;
+    background-color: #fdba74;
 }
 
 .menu-box.hidden .menu-content {
@@ -77,4 +82,45 @@ h2 {
 
 .menu-box.hidden .menu-title-container {
     border-bottom: none;
+}
+
+.menu-form {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.menu-form-input-box {
+    margin-bottom: 0.5rem;
+}
+
+.menu-form-input-box label {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.menu-form-input-box input[type=text], .menu-form-input-box input[type=email], .menu-form-input-box input[type=tel],
+.menu-form-input-box input[type=password], .menu-form-input-box input[type=date], .menu-form-input-box input[type=time],
+.menu-form-input-box input[type=number], .menu-form-input-box select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    font-size: 1rem;
+    background: #fff5ed;
+    color: #422006;
+    border: 2px solid #422006;
+    border-radius: 5px;
+    font-weight: normal;
+}
+
+.menu-form-input-box span {
+    font-weight: normal;
+    font-size: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+}
+
+
+.checkbox-label-group {
+    cursor: pointer;
+    text-transform: capitalize;
 }

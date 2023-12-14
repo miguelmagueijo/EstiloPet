@@ -4,7 +4,7 @@
     redirectToIfNotLogged();
 
     if (!isset($_POST["idAnimal"])) {
-        header("Location: PgUtilizador.php");
+        header("Location: PgUtilizador.php?inv_animal");
         die();
     }
 
@@ -12,7 +12,7 @@
     $redirectPage = "PgEfetuarMarcacao.php?idCliente=$clientId&";
     if (!auth_isAdmin() && !auth_isWorker()) {
         $clientId = $_SESSION["userId"];
-        $redirectPage = "PgEfetuarMarcacao.php?";
+        $redirectPage = "PgUtilizador.php?";
     }
 
     $invalidFields = array();

@@ -2,6 +2,42 @@
     font-family: Arial, sans-serif;
 }
 
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    max-width: 750px;
+    text-align: center;
+    color: #432207;
+}
+
+thead {
+    background-color: #fdba74;
+    color: #422006;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #432207;
+    font-size: 1.1rem;
+}
+
+tr td {
+    background: white;
+    font-size: 1rem;
+}
+
 body {
     background: url('fundo.gif') repeat-x;
     margin: 20px;
@@ -245,7 +281,7 @@ nav {
 
 .nav-login-btn, .nav-register-btn {
     color: #432207;
-    background-color: #fb923c;
+    background-color: #fdba74;
 }
 
 .nav-login-btn:hover, .nav-register-btn:hover {
@@ -460,7 +496,7 @@ footer {
 }
 
 .form-btn:hover {
-    background-color: #fb923c;
+    background-color: #fdba74;
     color: #431407;
 }
 
@@ -478,7 +514,7 @@ footer {
     display: inline-block;
     font-size: 1rem;
     font-weight: bold;
-    background: #fb923c;
+    background: #fdba74;
     border: 2px solid #431407;
     border-radius: 5px;
     padding: 0.5rem 2.5rem;
@@ -521,11 +557,29 @@ pre {
     font-weight: bolder;
     font-family: Calibri, sans-serif;
     font-size: 1.2rem;
-    background: #fb923c;
+    background: #fdba74;
     transition-duration: 300ms;
 }
 
 .download-btn:hover {
     background: #422006;
     color: white;
+}
+
+.contact-btn {
+     display: block;
+     width: fit-content;
+     border: 2px solid #422006;
+     box-sizing: border-box;
+     padding: 0.5rem 2rem;
+     text-decoration: none;
+     margin: auto;
+     border-radius: 5px;
+     color: #422006;
+     font-weight: bold;
+     transition-duration: 300ms;
+}
+
+.contact-btn:hover {
+    background-color: #fdba74;
 }

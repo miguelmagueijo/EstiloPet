@@ -47,9 +47,9 @@
                     Fazer uma marcação
                 </a>
             </div>
-            <div id="table">
-                <h1>Tabela de Preços</h1>
-                <table>
+            <div>
+                <h1 style="text-align: center; font-size: 1.4rem;">Tabela de Preços</h1>
+                <table style="width: 500px">
                     <thead>
                         <tr>
                             <th colspan="2">Animal</th>
@@ -93,7 +93,9 @@
                     </tbody>
                 </table>
             </div>
-            <div id="contacto"><a href="contactos.php">Contactos</a></div>
+            <div style="text-align: center; margin: 1.5rem 0 5rem 0;">
+                <a class="goto-marcacoes-btn" href="contactos.php">Necessito de ajuda</a>
+            </div>
         </div>
     </div>
     <?php include_once("footer.html") ?>

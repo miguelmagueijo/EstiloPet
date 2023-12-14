@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' href='marcacoes_style.xslt'?>
+<registos>
+  <marcacoes>
+    <idMarcacao>1</idMarcacao>
+    <data>2023-12-15</data>
+    <hora>09:00:00</hora>
+    <tratamento>corte</tratamento>
+    <estado>0</estado>
+    <nomeAnimal>Snoopy</nomeAnimal>
+    <nomeUser>cliente</nomeUser>
+    <idUser>1</idUser>
+  </marcacoes>
+</registos>

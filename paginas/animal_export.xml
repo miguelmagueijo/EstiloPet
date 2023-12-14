@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' href='animal_style.xslt'?>
+<registos>
+  <animal>
+    <idAnimal>42</idAnimal>
+    <nomeAnimal>Snoopy</nomeAnimal>
+    <porte>Pequeno</porte>
+    <tipoAnimal>Cão</tipoAnimal>
+    <idUser>1</idUser>
+  </animal>
+  <animal>
+    <idAnimal>43</idAnimal>
+    <nomeAnimal>Rex</nomeAnimal>
+    <porte>Grande</porte>
+    <tipoAnimal>Cão</tipoAnimal>
+    <idUser>1</idUser>
+  </animal>
+</registos>

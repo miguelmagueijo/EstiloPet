@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' href='user_style.xslt'?>
+<registos>
+  <user>
+    <idUser>1</idUser>
+    <nomeUser>cliente</nomeUser>
+    <morada>Rua do lado</morada>
+    <email>cliente@cliente.pt</email>
+    <telemovel>912345678</telemovel>
+    <pass>4983a0ab83ed86e0e7213c8783940193</pass>
+    <tipoUtilizador>Cliente</tipoUtilizador>
+  </user>
+  <user>
+    <idUser>3</idUser>
+    <nomeUser>joao</nomeUser>
+    <morada>Rua da direita</morada>
+    <email>joao@joao.pt</email>
+    <telemovel>222723687</telemovel>
+    <pass>dccd96c256bc7dd39bae41a405f25e43</pass>
+    <tipoUtilizador>Funcionário</tipoUtilizador>
+  </user>
+  <user>
+    <idUser>4</idUser>
+    <nomeUser>joana</nomeUser>
+    <morada>Rua da esquerda</morada>
+    <email>joana@joana.pt</email>
+    <telemovel>999333444</telemovel>
+    <pass>18f01959ff46071d73905d549cafde20</pass>
+    <tipoUtilizador>Funcionário</tipoUtilizador>
+  </user>
+  <user>
+    <idUser>5</idUser>
+    <nomeUser>maria</nomeUser>
+    <morada>Rua de cima</morada>
+    <email>maria@maria.pt</email>
+    <telemovel>923355771</telemovel>
+    <pass>263bce650e68ab4e23f28263760b9fa5</pass>
+    <tipoUtilizador>Funcionário</tipoUtilizador>
+  </user>
+  <user>
+    <idUser>6</idUser>
+    <nomeUser>admin</nomeUser>
+    <morada>Rua de baixo </morada>
+    <email>admi@admin.pt</email>
+    <telemovel>999999999</telemovel>
+    <pass>21232f297a57a5a743894a0e4a801fc3</pass>
+    <tipoUtilizador>Administrador</tipoUtilizador>
+  </user>
+  <user>
+    <idUser>7</idUser>
+    <nomeUser>teste</nomeUser>
+    <morada>rua do teste</morada>
+    <email>teste@teste.pt</email>
+    <telemovel>919191919</telemovel>
+    <pass>698dc19d489c4e4db73e28a713eab07b</pass>
+    <tipoUtilizador>Cliente</tipoUtilizador>
+  </user>
+  <user>
+    <idUser>28</idUser>
+    <nomeUser>nao_autorizado</nomeUser>
+    <morada>nao autorizado morada</morada>
+    <email>naoauth@mail.com</email>
+    <telemovel>123123123</telemovel>
+    <pass>fc4d6b9b6c7b6e090cd38c17b54a55ac</pass>
+    <tipoUtilizador>Cliente</tipoUtilizador>
+  </user>
+</registos>
