@@ -9,45 +9,105 @@
             O salão de beleza para cães e gatos que cuida da higiene e aparência dos seus pets com carinho e profissionalismo.
         </descricao>
         <texto>
-            Nós &#xD; somos especializados em serviços de lavagem e corte, e oferecemos uma variedade de opções de penteados para deixar seu animal de estimação com um visual incrível.
+            Nós somos especializados em serviços de lavagem e corte, e oferecemos uma variedade de opções de penteados para deixar seu animal de estimação com um visual incrível.
             O nosso site foi criado para tornar a sua experiência de agendamento fácil e conveniente. Pode selecionar os serviços que deseja para o seu pet, escolher um horário disponível e agendar sua consulta em apenas alguns cliques.
             Além disso, temos uma equipa de profissionais altamente treinados que são apaixonados por animais e estão prontos para cuidar do seu pet com todo o amor e atenção que ele merece.
         </texto>
     </capa>
-    <tabela_precos>
-        <animal>Cão</animal>
-        <porte>Grande</porte>
-        <preco_corte>90,00€</preco_corte>
-        <preco_banho>50,00€</preco_banho>
-    </tabela_precos>
-    <tabela_precos>
-        <animal>Cão</animal>
-        <porte>Médio</porte>
-        <preco_corte>70,00€</preco_corte>
-        <preco_banho>40,00€</preco_banho>
-    </tabela_precos>
-    <tabela_precos>
-        <animal>Cão</animal>
-        <porte>Pequeno</porte>
-        <preco_corte>50,00€</preco_corte>
-        <preco_banho>30,00€</preco_banho>
-    </tabela_precos>
-    <tabela_precos>
-        <animal>Gato</animal>
-        <porte>Grande</porte>
-        <preco_corte>80,00€</preco_corte>
-        <preco_banho>40,00€</preco_banho>
-    </tabela_precos>
-    <tabela_precos>
-        <animal>Gato</animal>
-        <porte>Médio</porte>
-        <preco_corte>60,00€</preco_corte>
-        <preco_banho>30,00€</preco_banho>
-    </tabela_precos>
-    <tabela_precos>
-        <animal>Gato</animal>
-        <porte>Pequeno</porte>
-        <preco_corte>40,00€</preco_corte>
-        <preco_banho>20,00€</preco_banho>
-    </tabela_precos>
+    <horario_funcionamento>
+        <horario>
+            <dia_semana>
+                Segunda-feira
+            </dia_semana>
+            <hora_funcionamento>
+                9:00 - 18:00
+            </hora_funcionamento>
+        </horario>
+        <horario>
+            <dia_semana>
+                Terça-feira
+            </dia_semana>
+            <hora_funcionamento>
+                9:00 - 18:00
+            </hora_funcionamento>
+        </horario>
+        <horario>
+            <dia_semana>
+                Quarta-feira
+            </dia_semana>
+            <hora_funcionamento>
+                9:00 - 18:00
+            </hora_funcionamento>
+        </horario>
+        <horario>
+            <dia_semana>
+                Quinta-feira
+            </dia_semana>
+            <hora_funcionamento>
+                9:00 - 18:00
+            </hora_funcionamento>
+        </horario>
+        <horario>
+            <dia_semana>
+                Sexta-feira
+            </dia_semana>
+            <hora_funcionamento>
+                9:00 - 18:00
+            </hora_funcionamento>
+        </horario>
+        <horario>
+            <dia_semana>
+                Sábado
+            </dia_semana>
+            <hora_funcionamento isBold="true">
+                Fechados
+            </hora_funcionamento>
+        </horario>
+        <horario>
+            <dia_semana>
+                Domingo
+            </dia_semana>
+            <hora_funcionamento isBold="true">
+                Fechados
+            </hora_funcionamento>
+        </horario>
+    </horario_funcionamento>
+    <tabela_precos_servico>
+        <servico>
+            <animal>Cão</animal>
+            <porte>Grande</porte>
+            <preco_corte>90,00€</preco_corte>
+            <preco_banho>50,00€</preco_banho>
+        </servico>
+        <servico>
+            <animal>Cão</animal>
+            <porte>Médio</porte>
+            <preco_corte>70,00€</preco_corte>
+            <preco_banho>40,00€</preco_banho>
+        </servico>
+        <servico>
+            <animal>Cão</animal>
+            <porte>Pequeno</porte>
+            <preco_corte>50,00€</preco_corte>
+            <preco_banho>30,00€</preco_banho>
+        </servico>
+        <servico>
+            <animal>Gato</animal>
+            <porte>Grande</porte>
+            <preco_corte>80,00€</preco_corte>
+            <preco_banho>40,00€</preco_banho>
+        </servico>
+        <servico>
+            <animal>Gato</animal>
+            <porte>Médio</porte>
+            <preco_corte>60,00€</preco_corte>
+            <preco_banho>30,00€</preco_banho>
+        </servico>
+        <servico>
+            <animal>Gato</animal>
+            <porte>Pequeno</porte>
+            <preco_corte>40,00€</preco_corte>
+            <preco_banho>20,00€</preco_banho>
+        </servico>
+    </tabela_precos_servico>
 </info>
