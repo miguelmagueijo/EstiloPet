@@ -38,6 +38,102 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="tabela_marcacoes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="marcacoes" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="idMarcacao" use="required" type="xs:integer"/>
+                    <xs:element name="data" use="required" type="xs:date"/>
+                    <xs:element name="hora" use="required" type="xs:time"/>
+                    <xs:element name="idUser" use="required" type="xs:integer"/>
+                    <xs:element name="idAnimal" use="required" type="xs:integer"/>
+                    <xs:element name="tratamento" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="10"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="func" use="required" type="xs:integer"/>
+                    <xs:element name="estado" use="required" default="0" type="xs:integer"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tabela_servicos_func">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="servicos_func" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="idUser" use="required" type="xs:integer"/>
+                    <xs:element name="tratamento" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="10"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="tipoAnimal" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="5"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tabela_user">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="user" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="idUser" use="required" type="xs:integer"/>
+                    <xs:element name="nomeUser" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="50"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="morada" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="60"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="email" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="30"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="telemovel" use="required" type="xs:integer"/>
+                    <xs:element name="pass" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="32"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="tipoUtilizador" type="xs:integer"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

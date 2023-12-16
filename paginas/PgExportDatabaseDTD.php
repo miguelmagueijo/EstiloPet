@@ -24,8 +24,9 @@
         $tableNames = $_POST["table_name"];
     }
 
-    $dtdString = "<!DOCTYPE lod_mm_ma [\n";
-    $dtdString .= "\t<!ELEMENT lod_mm_ma (";
+    /* @var $dbname string */
+    $dtdString = "<!DOCTYPE $dbname [\n";
+    $dtdString .= "\t<!ELEMENT $dbname (";
 
     foreach ($tableNames as $tableName) {
         $dtdString .= "tabela_".$tableName.", ";

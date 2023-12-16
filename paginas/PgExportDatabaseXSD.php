@@ -61,11 +61,12 @@
 
     $xsdDoc = new DOMDocument("1.0", "UTF-8");
     $xsdDoc->formatOutput = true;
-    $xsdRoot = $xsdDoc->createElement("xs:schema"); // TODO: use variable from basededados.h
+    $xsdRoot = $xsdDoc->createElement("xs:schema");
     $xsdRoot->setAttribute("xmlns:xs", "http://www.w3.org/2001/XMLSchema");
 
     $dbElement = $xsdDoc->createElement("xs:element");
-    $dbElement->setAttribute("name", "lod_mm_ma");
+    /* @var $dbname string */
+    $dbElement->setAttribute("name", $dbname);
 
     $dbElementComplexType = $xsdDoc->createElement("xs:complexType");
     $dbElementSequence = $xsdDoc->createElement("xs:sequence");
