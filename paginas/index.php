@@ -23,7 +23,7 @@
                 <img src="rex.jpg">
                 <img src="ze.jpg">
             </div>
-
+            <a class="info-voltar-btn" style="margin-bottom: 0" href="info.xml">Ver dados do website em XML!</a>
             <div id="text">
                 <h3>Bem-vindo ao Estilo Pet </h3>
                 <h4>O salão de beleza para cães e gatos que cuida da higiene e aparência <br>dos

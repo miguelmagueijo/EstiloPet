@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lod_mm_ma>
-  <export_date timezone="Europe/Lisbon">2023-12-14 19:39:58</export_date>
+  <export_date timezone="Europe/Lisbon">2023-12-16 17:46:39</export_date>
   <tabela_animal>
     <animal>
       <idAnimal>16</idAnimal>
@@ -27,18 +27,39 @@
       <idAnimal>42</idAnimal>
       <nomeAnimal>Snoopy</nomeAnimal>
       <porte>Pequeno</porte>
-      <tipoAnimal>Cão</tipoAnimal>
+      <tipoAnimal>cao</tipoAnimal>
       <idUser>1</idUser>
     </animal>
     <animal>
       <idAnimal>43</idAnimal>
       <nomeAnimal>Rex</nomeAnimal>
-      <porte>Grande</porte>
-      <tipoAnimal>Cão</tipoAnimal>
+      <porte>grande</porte>
+      <tipoAnimal>cao</tipoAnimal>
       <idUser>1</idUser>
     </animal>
   </tabela_animal>
-  <tabela_marcacoes>NO DATA</tabela_marcacoes>
+  <tabela_marcacoes>
+    <marcacoes>
+      <idMarcacao>1</idMarcacao>
+      <data>2023-12-18</data>
+      <hora>10:00:00</hora>
+      <idUser>1</idUser>
+      <idAnimal>42</idAnimal>
+      <tratamento>corte</tratamento>
+      <func>3</func>
+      <estado>0</estado>
+    </marcacoes>
+    <marcacoes>
+      <idMarcacao>2</idMarcacao>
+      <data>2023-12-19</data>
+      <hora>15:00:00</hora>
+      <idUser>1</idUser>
+      <idAnimal>43</idAnimal>
+      <tratamento>banho</tratamento>
+      <func>4</func>
+      <estado>0</estado>
+    </marcacoes>
+  </tabela_marcacoes>
   <tabela_servicos_func>
     <servicos_func>
       <idUser>3</idUser>

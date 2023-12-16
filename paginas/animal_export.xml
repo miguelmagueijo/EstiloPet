@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type='text/xsl' href='animal_style.xslt'?>
-<registos>
+<lod_mm_ma>
+  <who-exported>
+    <nomeUser>cliente</nomeUser>
+    <tipoUtilizador>2</tipoUtilizador>
+    <export-date>2023-12-16</export-date>
+    <export-time>17:55:42</export-time>
+  </who-exported>
   <animal>
-    <idAnimal>42</idAnimal>
-    <nomeAnimal>Snoopy</nomeAnimal>
-    <porte>Pequeno</porte>
-    <tipoAnimal>Cão</tipoAnimal>
-    <idUser>1</idUser>
+    <registo>
+      <idAnimal>42</idAnimal>
+      <nomeAnimal>Snoopy</nomeAnimal>
+      <porte>Pequeno</porte>
+      <tipoAnimal>cao</tipoAnimal>
+      <idUser>1</idUser>
+    </registo>
+    <registo>
+      <idAnimal>43</idAnimal>
+      <nomeAnimal>Rex</nomeAnimal>
+      <porte>grande</porte>
+      <tipoAnimal>cao</tipoAnimal>
+      <idUser>1</idUser>
+    </registo>
   </animal>
-  <animal>
-    <idAnimal>43</idAnimal>
-    <nomeAnimal>Rex</nomeAnimal>
-    <porte>Grande</porte>
-    <tipoAnimal>Cão</tipoAnimal>
-    <idUser>1</idUser>
-  </animal>
-</registos>
+</lod_mm_ma>

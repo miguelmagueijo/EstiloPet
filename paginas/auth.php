@@ -1,6 +1,7 @@
 <?php
     include_once('../basedados/basedados.h');
     include_once("tiposUtilizadores.php");
+    date_default_timezone_set("Europe/Lisbon");
 
     /* @var $conn mysqli */
     if (!isset($conn) || !$conn->ping()) {

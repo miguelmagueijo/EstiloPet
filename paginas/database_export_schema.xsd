@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="lod_mm_ma">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="tabela_animal">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="animal" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="idAnimal" use="required" type="xs:integer"/>
+                    <xs:element name="nomeAnimal" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="30"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="porte" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="10"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="tipoAnimal" use="required">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="5"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="idUser" use="required" type="xs:integer"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

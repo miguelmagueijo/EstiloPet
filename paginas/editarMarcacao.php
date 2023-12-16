@@ -57,12 +57,12 @@
 
     $appointmentData = $res->fetch_assoc();
 
+    // Tell user that it was updated even nothing needs to change!
     if (strpos($appointmentData["hora"], $hora) === 0 && $data == $appointmentData["data"]) {
         header("Location: $redirectPage"."success");
         die();
     }
 
-    // Tell user that it was updated even nothing needs to change!
     if ($appointmentData["estadoMarcacao"] == 1 && !auth_isAdmin()) {
         $msg = "Não pode alterar uma marcação já realizada";
         header("Location: $redirectPage"."db_error&msg=$msg");
@@ -77,9 +77,18 @@
     // ####### Time restriction
     $appointmentTimeStart = strtotime($data . " " . $hora);
     if (time() > $appointmentTimeStart && !auth_isAdmin()) { // admin can bypass time restrictions to fix previous appointments
-        header("Location: $redirectPage"."inv_time");
+        $msg = "Não pode alterar a hora para o passado";
+        header("Location: $redirectPage"."db_error&msg=$msg");
         die();
     }
+
+    $weekDay = date("N", $appointmentTimeStart);
+    if ($weekDay ==  6 || $weekDay == 7) {
+        $msg = "Não fazemos atendimentos ao fim de semana";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
     $durationInMinutes = $appointmentData["tratamento"] == "corte" ? 60 : 30;
     $appointmentTimeEnd = strtotime($data . " " . $hora . " + $durationInMinutes minutes");
 

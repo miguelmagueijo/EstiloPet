@@ -44,6 +44,11 @@ body {
     font-family: 'Courier New', Courier, monospace;
 }
 
+body.no-bg {
+    background: none;
+    background-color: transparent !important;
+}
+
 #header {
     width: 950px;
     height: 140px;

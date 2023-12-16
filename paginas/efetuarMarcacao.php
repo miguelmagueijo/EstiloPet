@@ -43,9 +43,18 @@
     // ####### Time restriction
     $appointmentTimeStart = strtotime($data . " " . $hora);
     if (time() > $appointmentTimeStart) {
-        header("Location: $redirectPage"."inv_time");
+        $msg = "Tempo dado é no passado";
+        header("Location: $redirectPage"."db_error&msg=$msg");
         die();
     }
+
+    $weekDay = date("N", $appointmentTimeStart);
+    if ($weekDay ==  6 || $weekDay == 7) {
+        $msg = "Não fazemos atendimentos ao fim de semana";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
     $durationInMinutes = $tratamento == "corte" ? 60 : 30;
     $appointmentTimeEnd = strtotime($data . " " . $hora . " + $durationInMinutes minutes");
 

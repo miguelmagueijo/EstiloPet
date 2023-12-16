@@ -14,9 +14,19 @@
 
     $pi = $xmlDoc->createProcessingInstruction("xml-stylesheet", "type='text/xsl' href='".$table."_style.xslt'");
     $xmlDoc->appendChild($pi);
-    
-    $fp = $xmlDoc->createElement("registos");
-    $xmlDoc->appendChild($fp);
+
+    $res = $conn->query("SELECT nomeUser, tipoUtilizador, CURRENT_DATE() as 'export-date', CURRENT_TIME() as 'export-time'
+                               FROM user
+                               WHERE idUser = " . $_SESSION["userId"]);
+
+    $exportInfoElement = $xmlDoc->createElement("who-exported");
+    foreach($res->fetch_assoc() as $column => $value) {
+        $exportInfoElement->appendChild($xmlDoc->createElement($column, $value));
+    }
+
+    /* @var $dbname string */
+    $rootElement = $xmlDoc->appendChild($xmlDoc->createElement($dbname));
+    $rootElement->appendChild($exportInfoElement);
 
     switch ($table) {
         case "animal":
@@ -30,26 +40,29 @@
 
             break;
         case "marcacoes":
-            $whereExtraArgs = "";
-
-            if (auth_isWorker()) {
-                $whereExtraArgs = "AND m.func = ". $_SESSION["userId"];
-            } else if (auth_isClient()) {
-                $whereExtraArgs = "AND u.idUser = ". $_SESSION["userId"];
-            }
-
             $query = "
                 SELECT m.idMarcacao, m.data, m.hora, m.tratamento, m.estado, a.nomeAnimal,
                        u.nomeUser, u.idUser
                 FROM marcacoes m 
                     INNER JOIN animal a ON m.idAnimal = a.idAnimal
                     INNER JOIN user u ON m.idUser = u.idUser
-                WHERE estado = 0 $whereExtraArgs
             ";
+
+            if (auth_isWorker()) {
+                $query .= " WHERE estado = 0 AND m.func = ". $_SESSION["userId"];
+            } else if (auth_isClient()) {
+                $query .= " WHERE estado = 0 AND u.idUser = ". $_SESSION["userId"];
+            }
+
+            $query .= " ORDER BY m.data, m.hora";
 
             $res = $conn->query($query);
             break;
         case "user":
+            if (!auth_isAdmin()) {
+                die("O seu tipo de utilizador não permite ter ou consultar os utilizadores");
+            }
+
             $query = "SELECT * FROM user";
             break;
         default:
@@ -57,39 +70,38 @@
     }
 
     $res = $conn->query($query);
+    $tableElement = $xmlDoc->createElement($table);
+    $rootElement->appendChild($tableElement);
 
-    while($row = $res->fetch_assoc()) {
-        $nivel1 = $xmlDoc->createElement($table);
-        $fp->appendChild($nivel1);
-        foreach($row as $key => $value){
-            if($table == "user" && $key=="tipoUtilizador"){
-                switch($value ){
-                    case 0:
-                        $nivel2=$xmlDoc->createElement($key,"Administrador");
-                        $nivel1->appendChild($nivel2);
+    while ($row = $res->fetch_assoc()) {
+        $registoElement = $xmlDoc->createElement("registo");
+        $tableElement->appendChild($registoElement);
+        foreach ($row as $key => $value) {
+            if ($table == "user" && $key=="tipoUtilizador") {
+                $translatedElement = $xmlDoc->createElement("tipoUtilizadorTraduzido");
+                switch($value){
+                    case ADMIN:
+                        $translatedElement->nodeValue = "Administrador";
                         break;
-                    case 1:
-                        $nivel2=$xmlDoc->createElement($key,"Funcionário");
-                        $nivel1->appendChild($nivel2);
+                    case FUNC:
+                        $translatedElement->nodeValue = "Funcionário";
                         break;
-                    case 2:
-                        $nivel2=$xmlDoc->createElement($key,"Cliente");
-                        $nivel1->appendChild($nivel2);
+                    case CLIENTE:
+                        $translatedElement->nodeValue = "Cliente";
                         break;
-                    case 3:
-                        $nivel2=$xmlDoc->createElement($key,"Cliente por validar");
-                        $nivel1->appendChild($nivel2);
+                    case CLIENTE_POR_VALIDAR:
+                        $translatedElement->nodeValue = "Cliente por validar";
                         break;
-                    }
-                    
-            }else{
-                $nivel2=$xmlDoc->createElement($key,$value);
-                $nivel1->appendChild($nivel2);
+                    default:
+                        $translatedElement->nodeValue = "Desconhecido";
+                        break;
+                }
+                $registoElement->appendChild($translatedElement);
             }
-            
+
+            $columnElement = $xmlDoc->createElement($key, $value);
+            $registoElement->appendChild($columnElement);
         }
-        
-        echo "<br>";
     }
 
     $xmlDoc->save($table."_export.xml");

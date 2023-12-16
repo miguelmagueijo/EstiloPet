@@ -144,3 +144,22 @@ text h4 {
 #container-marcacao{
   margin-bottom: 100px;
 }
+
+.info-voltar-btn {
+  display: block;
+  margin: 1rem auto;
+  width: fit-content;
+  border: 2px solid #422006;
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: #422006;
+  border-radius: 5px;
+  font-weight: bold;
+  transition-duration: 300ms;
+}
+
+.info-voltar-btn:hover {
+  background-color: #422006;
+  color: white;
+}

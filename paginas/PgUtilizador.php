@@ -355,7 +355,7 @@
     <link rel="stylesheet" type="text/css" href="pgUtilizador.css">
 </head>
 
-<body>
+<body style="margin: 0;">
     <?php
         $CURR_PAGE_NAME = "user_page";
         include_once("navbar.php");
@@ -373,9 +373,11 @@
                 </div>
             ";
         } else if (count($_GET) >= 1) {
+            $motivo = isset($_GET["msg"]) ? $_GET["msg"] : "dados inválidos";
+
             echo "
                 <div class='edit-content-warning error'>
-                    Operação realizada com dados inválidos
+                    Operação realizada sem sucesso!<br>Motivo: $motivo
                 </div>
             ";
         }
@@ -408,12 +410,12 @@
                     <div class='menu-content-option'>
                         <h3>Dados gerais</h3>
                         <div>
-                            <form action='pgExportTableXml.php' method='GET'>
+                            <form style='display: flex; gap: 0.25rem;' action='pgExportTableXml.php' method='GET'>
                                 <a class='menu-action-button' href='info.xml'>Dados do website</a>
                                 <button type='submit' class='menu-action-button' name='tableName' value='marcacoes'>Marcações</button>
         ";
 
-        if (auth_isClient()) {
+        if (auth_isClient() || auth_isAdmin()) {
             echo "<button type='submit' class='menu-action-button' name='tableName' value='animal'>Animais</button>";
         }
 
@@ -439,9 +441,11 @@
                     <div class='menu-content-option'>
                         <h3>Exportar base de dados para</h3>
                         <form method='POST'>
+                        <div style='display: flex; gap: 0.25rem;'>
                             <button class='menu-action-button' formaction='PgExportDatabase.php'>XML</button>
                             <button class='menu-action-button' formaction='PgExportDatabaseXSD.php'>XML Schema</button>
                             <button class='menu-action-button' formaction='PgExportDatabaseDTD.php'>DTD</button>
+                        </div>
                             <h4 style='margin: 0.2rem 0 0.5rem 0;'>Tabelas a exportar</h4>
                             <label class='checkbox-label-group'>
                                 Todas <input type='checkbox' value='all' id='all_tables' name='all_tables' checked />
