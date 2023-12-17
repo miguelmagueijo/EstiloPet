@@ -68,7 +68,7 @@
                     </div>
                     <div>
                         <h2>Tabela de Preços</h2>
-                        <table width="100%">
+                        <table style="width: 100%">
                             <thead>
                                 <tr bgcolor="#9acd32">
                                     <th colspan="2" style="text-align:left">Animal</th>

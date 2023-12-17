@@ -48,8 +48,77 @@
                 </a>
             </div>
             <div>
+                <h2 style="text-align: center">Horário de atendimento</h2>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th style="font-size: 1.1rem;">Dia da semana</th>
+                        <th style="font-size: 1rem;">Horário</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Segunda-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Terça-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Quarta-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Quinta-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Sexta-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Sábado
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                <b>Fechados</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Domingo
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                <b>Fechados</b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
                 <h1 style="text-align: center; font-size: 1.4rem;">Tabela de Preços</h1>
-                <table style="width: 500px">
+                <table style="width: 100%">
                     <thead>
                         <tr>
                             <th colspan="2">Animal</th>
