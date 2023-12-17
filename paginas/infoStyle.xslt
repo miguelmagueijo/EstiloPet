@@ -88,6 +88,18 @@
                             </tbody>
                         </table>
                     </div>
+                    <div>
+                        <h2>Morada</h2>
+                        <xsl:value-of select="morada/localizacao"/><br/>
+                        <xsl:value-of select="morada/rua"/><br/>
+                        <xsl:value-of select="morada/codigo_postal"/>
+                    </div>
+                    <div>
+                        <h2>Contactos</h2>
+                        <xsl:value-of select="contatos/telefone"/>
+                        <br/>
+                        <xsl:value-of select="contatos/email"/>
+                    </div>
                     <a class="info-voltar-btn" href="info.xml" download="EstiloPet.xml">Quero o XML!</a>
                     <a class="info-voltar-btn" href="info.zip" download="EstiloPetInfo.zip">Quero o XML e XSLT!</a>
                 </main>

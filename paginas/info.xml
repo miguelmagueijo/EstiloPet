@@ -110,4 +110,23 @@
             <preco_banho>20,00€</preco_banho>
         </servico>
     </tabela_precos_servico>
+    <morada>
+        <localizacao>
+            Campus da Talagueira  
+        </localizacao>
+        <rua>
+            Avenida do Empresário
+        </rua>
+        <codigo_postal>
+            6000-767 Castelo Branco
+        </codigo_postal>
+    </morada>
+    <contatos>
+        <telefone>
+            +351 272 000 000
+        </telefone>
+        <email>
+            estilopet@estilopet.pt
+        </email>
+    </contatos>
 </info>
