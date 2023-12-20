@@ -1,5 +1,8 @@
 <?php
     include_once("auth.php");
+
+    redirectToIfNotLogged();
+
     /* @var $conn mysqli */
 
     if (!isset($_GET["tableName"])) {
