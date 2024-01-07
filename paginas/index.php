@@ -23,7 +23,7 @@
                 <img src="rex.jpg">
                 <img src="ze.jpg">
             </div>
-
+            <a class="info-voltar-btn" style="margin-bottom: 0" href="info.xml">Ver dados do website em XML!</a>
             <div id="text">
                 <h3>Bem-vindo ao Estilo Pet </h3>
                 <h4>O salão de beleza para cães e gatos que cuida da higiene e aparência <br>dos
@@ -47,9 +47,78 @@
                     Fazer uma marcação
                 </a>
             </div>
-            <div id="table">
-                <h1>Tabela de Preços</h1>
-                <table>
+            <div>
+                <h2 style="text-align: center">Horário de atendimento</h2>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th style="font-size: 1.1rem;">Dia da semana</th>
+                        <th style="font-size: 1rem;">Horário</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Segunda-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Terça-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Quarta-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Quinta-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Sexta-feira
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                9:00 - 18:00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Sábado
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                <b>Fechados</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 1rem;"><xsl:value-of select="dia_semana"/>
+                                Domingo
+                            </td>
+                            <td style="text-align: center; font-size: 1rem;">
+                                <b>Fechados</b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h1 style="text-align: center; font-size: 1.4rem;">Tabela de Preços</h1>
+                <table style="width: 100%">
                     <thead>
                         <tr>
                             <th colspan="2">Animal</th>
@@ -93,7 +162,9 @@
                     </tbody>
                 </table>
             </div>
-            <div id="contacto"><a href="contactos.php">Contactos</a></div>
+            <div style="text-align: center; margin: 1.5rem 0 5rem 0;">
+                <a class="goto-marcacoes-btn" href="contactos.php">Necessito de ajuda</a>
+            </div>
         </div>
     </div>
     <?php include_once("footer.html") ?>

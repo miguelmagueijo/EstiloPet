@@ -46,8 +46,8 @@ INSERT INTO `animal` (`idAnimal`, `nomeAnimal`, `porte`, `tipoAnimal`, `idUser`)
 (16, 'Xica', 'medio', 'gato', 7),
 (19, 'Zé', 'pequeno', 'gato', 7),
 (22, 'Tobby', 'grande', 'cao', 7),
-(42, 'Snoopy', 'Pequeno', 'Cão', 1),
-(43, 'Rex', 'Grande', 'Cão', 1);
+(42, 'Snoopy', 'Pequeno', 'cao', 1),
+(43, 'Rex', 'Grande', 'cao', 1);
 
 -- --------------------------------------------------------
 

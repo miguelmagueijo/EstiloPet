@@ -52,7 +52,7 @@
 
     $userId = $res->fetch_assoc()["idUser"];
 
-    if ($userId != $_SESSION["userId"]) {
+    if ($userId != $_SESSION["userId"] && !auth_isAdmin()) {
         $msg="Só pode editar os seus próprios animais";
         header("Location: $redirectPage"."db_error&msg=$msg");
         die();

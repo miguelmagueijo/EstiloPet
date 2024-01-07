@@ -4,7 +4,7 @@
     redirectToIfNotLogged();
 
     if (!isset($_POST["idAnimal"])) {
-        header("Location: PgUtilizador.php");
+        header("Location: PgUtilizador.php?inv_animal");
         die();
     }
 
@@ -12,7 +12,7 @@
     $redirectPage = "PgEfetuarMarcacao.php?idCliente=$clientId&";
     if (!auth_isAdmin() && !auth_isWorker()) {
         $clientId = $_SESSION["userId"];
-        $redirectPage = "PgEfetuarMarcacao.php?";
+        $redirectPage = "PgUtilizador.php?";
     }
 
     $invalidFields = array();
@@ -43,9 +43,18 @@
     // ####### Time restriction
     $appointmentTimeStart = strtotime($data . " " . $hora);
     if (time() > $appointmentTimeStart) {
-        header("Location: $redirectPage"."inv_time");
+        $msg = "Tempo dado é no passado";
+        header("Location: $redirectPage"."db_error&msg=$msg");
         die();
     }
+
+    $weekDay = date("N", $appointmentTimeStart);
+    if ($weekDay ==  6 || $weekDay == 7) {
+        $msg = "Não fazemos atendimentos ao fim de semana";
+        header("Location: $redirectPage"."db_error&msg=$msg");
+        die();
+    }
+
     $durationInMinutes = $tratamento == "corte" ? 60 : 30;
     $appointmentTimeEnd = strtotime($data . " " . $hora . " + $durationInMinutes minutes");
 

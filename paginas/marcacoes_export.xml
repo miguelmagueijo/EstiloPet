@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' href='marcacoes_style.xslt'?>
+<lod_mm_ma>
+  <who-exported>
+    <nomeUser>cliente</nomeUser>
+    <tipoUtilizador>2</tipoUtilizador>
+    <export-date>2023-12-16</export-date>
+    <export-time>17:55:42</export-time>
+  </who-exported>
+  <marcacoes>
+    <registo>
+      <idMarcacao>1</idMarcacao>
+      <data>2023-12-18</data>
+      <hora>10:00:00</hora>
+      <tratamento>corte</tratamento>
+      <estado>0</estado>
+      <nomeAnimal>Snoopy</nomeAnimal>
+      <nomeUser>cliente</nomeUser>
+      <idUser>1</idUser>
+    </registo>
+    <registo>
+      <idMarcacao>2</idMarcacao>
+      <data>2023-12-19</data>
+      <hora>15:00:00</hora>
+      <tratamento>banho</tratamento>
+      <estado>0</estado>
+      <nomeAnimal>Rex</nomeAnimal>
+      <nomeUser>cliente</nomeUser>
+      <idUser>1</idUser>
+    </registo>
+  </marcacoes>
+</lod_mm_ma>

@@ -1,5 +1,6 @@
 <?php
 // Ligar há base de dados
+$dbname = "lod_mm_ma";
 $dbhost = "localhost";
 $dbuser = "root";
 $dbpass = "";
@@ -12,6 +13,6 @@ if(! $conn ){
 }
 
 //Seleciona a base de dados
-mysqli_select_db($conn, "lod_mm_ma");
+mysqli_select_db($conn, $dbname);
 
 ?>

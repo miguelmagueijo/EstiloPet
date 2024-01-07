@@ -27,7 +27,7 @@
 
     $userId = $res->fetch_assoc()["idUser"];
 
-    if ($userId != $_SESSION["userId"]) {
+    if ($userId != $_SESSION["userId"] && !auth_isAdmin()) {
         header("Refresh:2; url=PgUtilizador.php");
         die("Só o dono do animal pode apagar o seu animal");
     }

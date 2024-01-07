@@ -38,7 +38,7 @@
         die();
     }
 
-    $userTypeId = auth_isLogged() ? CLIENTE : CLIENTE_POR_VALIDAR;
+    $userTypeId = auth_isAdmin() ? CLIENTE : CLIENTE_POR_VALIDAR;
 
     /* @var $conn mysqli */
     $stmt = $conn->prepare("INSERT INTO `user` (`nomeUser`, `morada`, `email`, `telemovel`, `pass`, `tipoUtilizador`)

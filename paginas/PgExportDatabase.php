@@ -33,7 +33,8 @@
 
     $xmlDoc = new DOMDocument("1.0", "UTF-8");
     $xmlDoc->formatOutput = true;
-    $xmlRoot = $xmlDoc->createElement("lod_mm_ma"); // TODO: use variable from basededados.h
+    /* @var $dbname string */
+    $xmlRoot = $xmlDoc->createElement($dbname);
 
     $exportDateElement = $xmlDoc->createElement("export_date", $currentDate->format("Y-m-d H:i:s"));
     $exportDateElement->setAttribute("timezone", $currentDate->getTimezone()->getName());

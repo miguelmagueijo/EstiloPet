@@ -111,8 +111,8 @@
             </button>
         </form>
     </div>
-    <div style="margin-top: 2rem" id="table-pesos">
-        <table>
+    <div style="margin-top: 2rem">
+        <table style="width: 650px">
             <thead style="background-color: #fdba74">
             <tr>
                 <th>Porte</th>

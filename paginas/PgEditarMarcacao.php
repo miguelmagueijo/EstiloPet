@@ -38,7 +38,7 @@
     $nowTime = strtotime(date("H:m"));
     $todayDate = strtotime(date("Y-m-d"));
 
-    if (auth_isClient() && $todayDate >= strtotime($pageData["data"]) || $todayDate > strtotime($pageData["data"])) {
+    if (auth_isClient() && $todayDate >= strtotime($pageData["data"]) || $todayDate > strtotime($pageData["data"]) && !auth_isAdmin()) {
         header("Refresh: 3; url=PgUtilizador.php");
         die("Não pode atualizar marcações antigas ou do próprio dia se for cliente.");
     }

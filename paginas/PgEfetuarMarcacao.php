@@ -13,11 +13,27 @@
     $tomorrowDate = date("Y-m-d", strtotime(date("Y-m-d") . " + 1 days"));
 
     /* @var $conn mysqli */
+    $stmt = $conn->prepare("SELECT nomeUser FROM user WHERE idUser = ?");
+    $stmt->bind_param("i", $clientId);
+
+    if (!$stmt->execute()) {
+        die("Por favor recarregue a página, se persistir contacte um administrador #1");
+    }
+
+    $res = $stmt->get_result();
+
+    if (!$res || $res->num_rows == 0) {
+        header("Refresh:2; url=PgUtilizador.php");
+        die("Cliente não existe (id: ".$clientId.")");
+    }
+
+    $clientName = $res->fetch_row()[0];
+
     $stmt = $conn->prepare("SELECT idAnimal, nomeAnimal FROM animal WHERE idUser = ?");
     $stmt->bind_param("i", $clientId);
 
     if (!$stmt->execute()) {
-        die("Por favor recarregue a página, se persistir contacte um administrador");
+        die("Por favor recarregue a página, se persistir contacte um administrador #2");
     }
 
     $res = $stmt->get_result();
@@ -73,6 +89,12 @@
         <div class="edit-content-container">
             <h2>Agendar nova marcação</h2>
             <form action="efetuarMarcacao.php" method="POST">
+                <div class="input-box">
+                    <label>
+                        Nome do cliente
+                        <input type="text" disabled value="<?php echo $clientName ?>"/>
+                    </label>
+                </div>
                 <div class="input-box <?php echo isset($_GET['inv_time']) ? 'invalid' : '' ?>">
                     <label>
                         Data

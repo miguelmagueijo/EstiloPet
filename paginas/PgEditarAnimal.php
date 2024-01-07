@@ -2,6 +2,7 @@
     include_once("auth.php");
     redirectToIfNotLogged();
 
+
     if (!isset($_GET["idAnimal"])) {
         header("Location: PgUtilizador.php");
         die();
@@ -10,8 +11,11 @@
     $animalId = $_GET["idAnimal"];
 
     /* @var $conn mysqli */
-    $stmt = $conn->prepare("SELECT nomeAnimal, porte, tipoAnimal FROM animal WHERE idAnimal = ? AND idUser = ?");
-    $stmt->bind_param("ii", $animalId, $_SESSION["userId"]);
+    $stmt = $conn->prepare("SELECT nomeAnimal, porte, tipoAnimal, u.idUser as 'idUser', u.nomeUser as 'nomeUser'
+                                  FROM animal a
+                                      INNER JOIN user u ON a.idUser = u.idUser
+                                  WHERE a.idAnimal = ?");
+    $stmt->bind_param("i", $animalId);
 
     if (!$stmt->execute()) {
         header("Refresh: 5; url=PgUtilizador.php");
@@ -26,6 +30,11 @@
     }
 
     $animalData = $res->fetch_assoc();
+
+    if ((!auth_isAdmin() && $_SESSION["userId"] != $animalData["idUser"]) || auth_isWorker()) {
+        header("Location: PgUtilizador.php");
+        die();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -65,6 +74,18 @@
     <div class="edit-content-container">
         <h2>Editar Animal</h2>
         <form action="editarAnimal.php" method="POST">
+            <?php
+                if (auth_isAdmin()) {
+                    echo "
+                        <div class='input-box'>
+                            <label>
+                                Nome do dono
+                                <input type='text' value='". $animalData["nomeUser"] ."' disabled/>
+                            </label>
+                        </div>  
+                    ";
+                }
+            ?>
             <div class="input-box <?php echo isset($_GET['inv_nome']) ? 'invalid' : '' ?>">
                 <label>
                     Nome
@@ -100,8 +121,8 @@
             </button>
         </form>
     </div>
-    <div style="margin-top: 2rem" id="table-pesos">
-        <table>
+    <div style="margin-top: 2rem;">
+        <table style="width: 650px;">
             <thead style="background-color: #fdba74">
             <tr>
                 <th>Porte</th>
